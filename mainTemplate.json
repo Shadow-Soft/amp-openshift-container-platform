@@ -8,10 +8,11 @@
 				"description": "Base URL for Marketplace Deployment",
 				"artifactsBaseUrl": ""
 			},
-			"defaultValue": "https://raw.githubusercontent.com/Microsoft/openshift-container-platform/master"
+			"defaultValue": "https://raw.githubusercontent.com/Shadow-Soft/amp-openshift-container-platform/master"
 		},		
 		"location": {
 		  "type": "string",
+		  "defaultValue": "eastus",
 		  "metadata": {
 			"description": "Location"
 		  }
@@ -35,7 +36,7 @@
 		},
 		"clusterSize": {
 			"type": "string",
-			"defaultValue": "medium",
+			"defaultValue": "small",
 			"allowedValues": [
 				"small", "medium", "large"
 			],
