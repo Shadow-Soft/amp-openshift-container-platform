@@ -1067,6 +1067,24 @@
 			}
 		},
 		{
+		    "condition": "[less(parameters('infraInstanceCount'),1)]",
+		    "type": "Microsoft.Network/publicIPAddresses",
+		    "name": "[variables('infraLbPublicIpDnsLabel')]",
+		    "location": "[resourceGroup().location]",
+		    "apiVersion": "[variables('apiVersionNetwork')]",
+		    "tags": {
+			"displayName": "InfraLBPublicIP",
+			"provider": "[variables('redHatTags').provider]",
+			"app": "[variables('redHatTags').app]"
+		    },
+		    "properties": {
+			"publicIPAllocationMethod": "Static",
+			"dnsSettings": {
+			    "domainNameLabel": "[variables('infraLbPublicIpDnsLabel')]"
+			}
+		    }
+		},
+		{
 		    "condition": "[greater(variables('infraInstanceCount'),0)]",
 			"name": "infraNodes",
 			"type": "Microsoft.Resources/deployments",
