@@ -12,7 +12,7 @@
         },
 	"apiVersionCompute": {
 	    "type": "string",
-	    "defaultValue": "2017-03-30"
+	    "defaultValue": "2017-03-30",
 	    "metadata": {
                 "description": "The ARM API version used for compute."
             }
