@@ -78,8 +78,6 @@
         },
         "dataDiskSize": {
             "type": "int",
-            "defaultValue": 128,
-            "minValue": 128,
             "metadata": {
                 "description": "Size of Data Disks "
             }
