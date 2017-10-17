@@ -1131,16 +1131,16 @@
 						"value": "[variables('dataDiskSize')]"
 					},
 					"rhsmUsername": {
-						"value": "[variables('rhsmUsername')]"
+						"value": "[parameters('rhsmUsername')]"
 					},
 					"rhsmPassword": {
-						"value": "[variables('rhsmPassword')]"
+						"value": "[parameters('rhsmPassword')]"
 					},
 					"rhsmPoolId": {
-						"value": "[variables('rhsmPoolId')]"
+						"value": "[parameters('rhsmPoolId')]"
 					},
 					"sshPublicKey": {
-						"value": "[variables('sshPublicKey')]"
+						"value": "[parameters('sshPublicKey')]"
 					}
 				}
 			}
