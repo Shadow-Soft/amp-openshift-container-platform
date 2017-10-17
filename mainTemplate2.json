@@ -1187,10 +1187,10 @@
 						"value": "[variables('openshiftMasterHostname')]"
 					},
 					"openshiftMasterPublicIpFqdn": {
-						"value": "[reference(variables('openshiftMasterPublicIpDnsLabel')).dnsSettings.fqdn]"
+						"value": "[reference(variables('openshiftMasterPublicIpDnsLabel'), variables('apiVersionNetwork')).dnsSettings.fqdn]"
 					},
 					"openshiftMasterPublicIpAddress": {
-						"value": "[reference(variables('openshiftMasterPublicIpDnsLabel')).ipAddress]"
+						"value": "[reference(variables('openshiftMasterPublicIpDnsLabel'), variables('apiVersionNetwork')).ipAddress]"
 					},
 					"openshiftInfraHostname": {
 						"value": "[variables('openshiftInfraHostname')]"
@@ -1223,7 +1223,7 @@
 						"value": "[parameters('aadClientSecret')]"
 					},
 					"nipioDomain": {
-						"value": "[concat(reference(variables('infraLbPublicIpDnsLabel')).ipAddress, '.nip.io')]"
+						"value": "[concat(reference(variables('infraLbPublicIpDnsLabel'), variables('apiVersionNetwork')).ipAddress, '.nip.io')]"
 					},
 					"customDomain": {
 						"value": "[variables('defaultSubDomain')]"
@@ -1258,7 +1258,7 @@
 		},
 		"Openshift Infra Load Balancer FQDN": {
 			"type": "string",
-			"value": "[reference(variables('infraLbPublicIpDnsLabel')).dnsSettings.fqdn]"
+			"value": "[reference(variables('infraLbPublicIpDnsLabel'), variables('apiVersionNetwork')).dnsSettings.fqdn]"
 		}
 	}
 }
