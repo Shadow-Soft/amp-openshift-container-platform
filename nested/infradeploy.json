@@ -77,12 +77,12 @@
             }
         },
         "dataDiskSize": {
-            "type": "string",
-            "defaultValue": "128",
+            "type": "int",
+            "defaultValue": 128,
             "allowedValues": [
-                "128",
-                "256",
-		        "512"
+                128,
+                256,
+		512
             ],
             "minLength": 1,
             "metadata": {
