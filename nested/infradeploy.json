@@ -10,27 +10,34 @@
             },
             "defaultValue": "https://raw.githubusercontent.com/Shadow-Soft/amp-openshift-container-platform/master"
         },
-	"apiVersionCompute": {
-	    "type": "string",
-	    "defaultValue": "2017-03-30",
-	    "metadata": {
+	    "apiVersionCompute": {
+	        "type": "string",
+	        "defaultValue": "2017-03-30",
+	        "metadata": {
                 "description": "The ARM API version used for compute."
             }
-	},
+	    },
         "apiVersionNetwork": {
-	    "type": "string",
-	    "defaultValue": "2017-09-01",
-	    "metadata": {
+	        "type": "string",
+	        "defaultValue": "2017-09-01",
+	        "metadata": {
                 "description": "The ARM API version used for networking."
             }
-	},
+	    },
         "apiVersionStorage": {
-	    "type": "string",
-	    "defaultValue": "2017-06-01",
-	    "metadata": {
+	        "type": "string",
+	        "defaultValue": "2017-06-01",
+	        "metadata": {
                 "description": "The ARM API version used for storage."
             }
-	},
+	    },
+		"apiVersionLinkTemplate": {
+	        "type": "string",
+	        "defaultValue": "2015-01-01",
+	        "metadata": {
+                "description": "The ARM API version used for Link Templates."
+            }
+	    },
         "openshiftClusterPrefix": {
             "type": "string",
             "defaultValue": "mycluster",
@@ -51,7 +58,7 @@
         "infraInstanceCount": {
             "type": "int",
             "defaultValue": 0,
-	    "minValue": 0,
+	        "minValue": 0,
             "metadata": {
                 "description": "Number of infrastructure node instances"
             }
@@ -69,13 +76,13 @@
                 "description": "Size of infrastructure VMs"
             }
         },
-	"dataDiskSize": {
+        "dataDiskSize": {
             "type": "string",
             "defaultValue": "128",
             "allowedValues": [
                 "128",
                 "256",
-		"512"
+		        "512"
             ],
             "minLength": 1,
             "metadata": {
@@ -114,7 +121,7 @@
         "apiVersionCompute": "[parameters('apiVersionCompute)]",
         "apiVersionNetwork": "[parameters('apiVersionNetwork)]",
         "apiVersionStorage": "[parameters('apiVersionStorage)]",
-        "apiVersionLinkTemplate": "2015-01-01",
+        "apiVersionLinkTemplate": "[parameters('apiVersionLinkTemplate)]",
         "namingInfix": "[toLower(parameters('openshiftClusterPrefix'))]",
         "openshiftInfraHostname": "[concat(variables('namingInfix'), '-infra')]",
         "newStorageAccountInfra": "[concat('infra', uniqueString(concat(resourceGroup().id, 'isa')))]",
