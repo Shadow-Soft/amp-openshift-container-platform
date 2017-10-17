@@ -10,6 +10,27 @@
             },
             "defaultValue": "https://raw.githubusercontent.com/Shadow-Soft/amp-openshift-container-platform/master"
         },
+	"apiVersionCompute": {
+	    "type": "string",
+	    "defaultValue": "2017-03-30"
+	    "metadata": {
+                "description": "The ARM API version used for compute."
+            }
+	},
+        "apiVersionNetwork": {
+	    "type": "string",
+	    "defaultValue": "2017-09-01",
+	    metadata": {
+                "description": "The ARM API version used for networking."
+            }
+	},
+        "apiVersionStorage": {
+	    "type": "string",
+	    "defaultValue": "2017-06-01"
+	    "metadata": {
+                "description": "The ARM API version used for storage."
+            }
+	},
         "openshiftClusterPrefix": {
             "type": "string",
             "defaultValue": "mycluster",
@@ -29,8 +50,8 @@
         },
         "infraInstanceCount": {
             "type": "int",
-            "defaultValue": 1,
-            "minValue": 1,
+            "defaultValue": 0,
+	    "minValue": 0
             "metadata": {
                 "description": "Number of infrastructure node instances"
             }
@@ -48,13 +69,13 @@
                 "description": "Size of infrastructure VMs"
             }
         },
-		"dataDiskSize": {
+	"dataDiskSize": {
             "type": "string",
             "defaultValue": "128",
             "allowedValues": [
                 "128",
                 "256",
-				"512"
+		"512"
             ],
             "minLength": 1,
             "metadata": {
@@ -90,9 +111,9 @@
         }
     },
     "variables": {
-        "apiVersionCompute": "2017-03-30",
-        "apiVersionNetwork": "2017-09-01",
-        "apiVersionStorage": "2017-06-01",
+        "apiVersionCompute": "[parameters('apiVersionCompute)]",
+        "apiVersionNetwork": "[parameters('apiVersionNetwork)]",
+        "apiVersionStorage": "[parameters('apiVersionStorage)]",
         "apiVersionLinkTemplate": "2015-01-01",
         "namingInfix": "[toLower(parameters('openshiftClusterPrefix'))]",
         "openshiftInfraHostname": "[concat(variables('namingInfix'), '-infra')]",
