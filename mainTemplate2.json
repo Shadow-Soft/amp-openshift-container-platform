@@ -1067,7 +1067,7 @@
 			}
 		},
 		{
-		    "condition": "[greater(parameters('infraInstanceCount'),0)]",
+		    "condition": "[greater(variables('infraInstanceCount'),0)]",
 			"name": "infraNodes",
 			"type": "Microsoft.Resources/deployments",
 			"apiVersion": "[variables('apiVersionLinkTemplate')]",
@@ -1094,7 +1094,7 @@
 					"apiVersionStorage": {
 						"value": "[variables('apiVersionStorage')]"
 					},
-					"apiVersionStorage": {
+					"apiVersionLinkTemplate": {
 						"value": "[variables('apiVersionLinkTemplate')]"
 					},
 					"infraInstanceCount": {
@@ -1105,9 +1105,6 @@
 					},
 					"openshiftInfraHostname": {
 						"value": "[variables('openshiftInfraHostname')]"
-					},
-					"infraInstanceCount": {
-						"value": "[variables('infraInstanceCount')]"
 					},
 					"infraVmSize": {
 						"value": "[variables('infraVmSize')]"
