@@ -1067,7 +1067,7 @@
 			}
 		},
 		{
-		    "condition": "[less(parameters('infraInstanceCount'),1)]",
+		    "condition": "[less(variables('infraInstanceCount'),1)]",
 		    "type": "Microsoft.Network/publicIPAddresses",
 		    "name": "[variables('infraLbPublicIpDnsLabel')]",
 		    "location": "[resourceGroup().location]",
