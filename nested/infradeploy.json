@@ -30,7 +30,7 @@
         "infraInstanceCount": {
             "type": "int",
             "defaultValue": 0,
-			"minValue": 0
+            "minValue": 0,
             "metadata": {
                 "description": "Number of infrastructure node instances"
             }
