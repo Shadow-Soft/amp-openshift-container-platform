@@ -38,7 +38,7 @@
 			"type": "string",
 			"defaultValue": "small",
 			"allowedValues": [
-				"small", "medium", "large"
+				"extrasmall","small", "medium", "large"
 			],
 			"minLength": 1,
 			"metadata": {
@@ -206,6 +206,15 @@
 		"nodeInstanceCount": "[variables('clusterSizeMap')[parameters('clusterSize')].nodeVmCount]",
 		"dataDiskSize": "[variables('clusterSizeMap')[parameters('clusterSize')].dataDiskSize]",
 		"clusterSizeMap": {
+			"extrasmall": {
+				"masterVmSize": "Standard_DS2_v2",
+				"masterVmCount": 1,
+				"infraVmSize": "Standard_DS2_v2",
+				"infraVmCount": 0,
+				"nodeVmSize": "Standard_DS2_v2",
+				"nodeVmCount": 1,
+				"dataDiskSize": 128
+			},
 			"small": {
 				"masterVmSize": "Standard_DS2_v2",
 				"masterVmCount": 1,
