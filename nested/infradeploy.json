@@ -393,7 +393,6 @@
                 "app": "[variables('redHatTags').app]"
             },
             "dependsOn": [
-                "[concat('Microsoft.Network/virtualNetworks/', variables('virtualNetworkName'))]",
                 "[concat('Microsoft.Network/loadBalancers/', variables('infraLoadBalancerName'))]",
                 "[concat('Microsoft.Network/networkSecurityGroups/', variables('openshiftInfraHostname'), '-nsg')]"
             ],
@@ -428,8 +427,6 @@
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "[variables('apiVersionLinkTemplate')]",
             "dependsOn": [
-                "[resourceId('Microsoft.Storage/storageAccounts', variables('newStorageAccountInfra'))]",
-                "[resourceId('Microsoft.Storage/storageAccounts', variables('diagStorageAccount'))]",
                 "infraNicLoop",
                 "infraavailabilityset"
             ],
