@@ -10,35 +10,35 @@
             },
             "defaultValue": "https://raw.githubusercontent.com/Shadow-Soft/amp-openshift-container-platform/master"
         },
-	    "apiVersionCompute": {
+	"apiVersionCompute": {
 	        "type": "string",
 	        "defaultValue": "2017-03-30",
 	        "metadata": {
                 "description": "The ARM API version used for compute."
             }
-	    },
+	},
         "apiVersionNetwork": {
 	        "type": "string",
 	        "defaultValue": "2017-09-01",
 	        "metadata": {
                 "description": "The ARM API version used for networking."
             }
-	    },
+	},
         "apiVersionStorage": {
 	        "type": "string",
 	        "defaultValue": "2017-06-01",
 	        "metadata": {
                 "description": "The ARM API version used for storage."
             }
-	    },
-		"apiVersionLinkTemplate": {
+	},
+	"apiVersionLinkTemplate": {
 	        "type": "string",
 	        "defaultValue": "2015-01-01",
 	        "metadata": {
                 "description": "The ARM API version used for Link Templates."
             }
-	    },
-        "openshiftClusterPrefix": {
+	},
+        "openshiftInfraHostname": {
             "type": "string",
             "defaultValue": "mycluster",
             "minLength": 1,
@@ -118,12 +118,11 @@
         }
     },
     "variables": {
-        "apiVersionCompute": "[parameters('apiVersionCompute)]",
-        "apiVersionNetwork": "[parameters('apiVersionNetwork)]",
-        "apiVersionStorage": "[parameters('apiVersionStorage)]",
-        "apiVersionLinkTemplate": "[parameters('apiVersionLinkTemplate)]",
-        "namingInfix": "[toLower(parameters('openshiftClusterPrefix'))]",
-        "openshiftInfraHostname": "[concat(variables('namingInfix'), '-infra')]",
+        "apiVersionCompute": "[parameters('apiVersionCompute')]",
+        "apiVersionNetwork": "[parameters('apiVersionNetwork')]",
+        "apiVersionStorage": "[parameters('apiVersionStorage')]",
+        "apiVersionLinkTemplate": "[parameters('apiVersionLinkTemplate')]",
+        "openshiftInfraHostname": "[parameters('openshiftInfraHostname')]",
         "newStorageAccountInfra": "[concat('infra', uniqueString(concat(resourceGroup().id, 'isa')))]",
         "diagStorageAccount": "[concat('diag', uniqueString(concat(resourceGroup().id, 'dsa')))]",
         "virtualNetworkName": "openshiftvnet",
