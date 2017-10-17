@@ -1273,7 +1273,7 @@
 			}
 		}, {
 			"type": "Microsoft.Compute/virtualMachines/extensions",
-			"name": "[concat(variables('openshiftBastionHostname'), '/deployOpenShift')]",
+			"name": "[concat(variables('openshiftBastionHostname'), '/prepBastion')]",
 			"location": "[parameters('location')]",
 			"apiVersion": "[variables('apiVersionCompute')]",
 			"tags": {
@@ -1396,7 +1396,7 @@
 			"type": "Microsoft.Resources/deployments",
 			"apiVersion": "[variables('apiVersionLinkTemplate')]",
 			"dependsOn": [
-				"[concat('Microsoft.Compute/virtualMachines/', variables('openshiftBastionHostname'), '/extensions/deployOpenShift')]",
+				"[concat('Microsoft.Compute/virtualMachines/', variables('openshiftBastionHostname'), '/extensions/prepBastion')]",
 				"masterPrepLoop",
 				"infraPrepLoop",
 				"nodePrepLoop"
