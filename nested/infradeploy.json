@@ -29,8 +29,8 @@
         },
         "infraInstanceCount": {
             "type": "int",
-            "defaultValue": 0,
-            "minValue": 0,
+            "defaultValue": 1,
+            "minValue": 1,
             "metadata": {
                 "description": "Number of infrastructure node instances"
             }
