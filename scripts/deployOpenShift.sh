@@ -38,6 +38,12 @@ MASTERLOOP=$((MASTERCOUNT - 1))
 INFRALOOP=$((INFRACOUNT - 1))
 NODELOOP=$((NODECOUNT - 1))
 
+INFRATYPE="infra"
+if $INFRACOUNT -eq 0
+then
+   INFRATYPE="master"
+fi
+
 # Generate private keys for use by Ansible
 echo $(date) " - Generating Private keys for use by Ansible for OpenShift Installation"
 
@@ -484,8 +490,8 @@ osm_default_node_selector='type=app'
 openshift_disable_check=memory_availability,docker_image_availability
 
 # default selectors for router and registry services
-openshift_router_selector='type=infra'
-openshift_registry_selector='type=infra'
+openshift_router_selector='type=${INFRATYPE}'
+openshift_registry_selector='type=${INFRATYPE}'
 
 openshift_master_cluster_hostname=$MASTERPUBLICIPHOSTNAME
 openshift_master_cluster_public_hostname=$MASTERPUBLICIPHOSTNAME
@@ -498,18 +504,18 @@ openshift_master_identity_providers=[{'name': 'htpasswd_auth', 'login': 'true', 
 openshift_hosted_metrics_deploy=false
 openshift_metrics_cassandra_storage_type=dynamic
 openshift_metrics_start_cluster=true
-openshift_metrics_hawkular_nodeselector={"type":"infra"}
-openshift_metrics_cassandra_nodeselector={"type":"infra"}
-openshift_metrics_heapster_nodeselector={"type":"infra"}
+openshift_metrics_hawkular_nodeselector={"type":"${INFRATYPE}"}
+openshift_metrics_cassandra_nodeselector={"type":"${INFRATYPE}"}
+openshift_metrics_heapster_nodeselector={"type":"${INFRATYPE}"}
 openshift_hosted_metrics_public_url=https://metrics.$ROUTING/hawkular/metrics
 
 # Setup logging
 openshift_hosted_logging_deploy=false
 openshift_hosted_logging_storage_kind=dynamic
 openshift_logging_fluentd_nodeselector={"logging":"true"}
-openshift_logging_es_nodeselector={"type":"infra"}
-openshift_logging_kibana_nodeselector={"type":"infra"}
-openshift_logging_curator_nodeselector={"type":"infra"}
+openshift_logging_es_nodeselector={"type":"${INFRATYPE}"}
+openshift_logging_kibana_nodeselector={"type":"${INFRATYPE}"}
+openshift_logging_curator_nodeselector={"type":"${INFRATYPE}"}
 openshift_master_logging_public_url=https://kibana.$ROUTING
 
 # host group for masters
@@ -576,8 +582,8 @@ osm_default_node_selector='type=app'
 openshift_disable_check=memory_availability,docker_image_availability
 
 # default selectors for router and registry services
-openshift_router_selector='type=infra'
-openshift_registry_selector='type=infra'
+openshift_router_selector='type=${INFRATYPE}'
+openshift_registry_selector='type=${INFRATYPE}'
 
 openshift_master_cluster_method=native
 openshift_master_cluster_hostname=$MASTERPUBLICIPHOSTNAME
@@ -591,18 +597,18 @@ openshift_master_identity_providers=[{'name': 'htpasswd_auth', 'login': 'true', 
 openshift_hosted_metrics_deploy=false
 openshift_metrics_cassandra_storage_type=dynamic
 openshift_metrics_start_cluster=true
-openshift_metrics_hawkular_nodeselector={"type":"infra"}
-openshift_metrics_cassandra_nodeselector={"type":"infra"}
-openshift_metrics_heapster_nodeselector={"type":"infra"}
+openshift_metrics_hawkular_nodeselector={"type":"${INFRATYPE}"}
+openshift_metrics_cassandra_nodeselector={"type":"${INFRATYPE}"}
+openshift_metrics_heapster_nodeselector={"type":"${INFRATYPE}"}
 openshift_hosted_metrics_public_url=https://metrics.$ROUTING/hawkular/metrics
 
 # Setup logging
 openshift_hosted_logging_deploy=false
 openshift_hosted_logging_storage_kind=dynamic
 openshift_logging_fluentd_nodeselector={"logging":"true"}
-openshift_logging_es_nodeselector={"type":"infra"}
-openshift_logging_kibana_nodeselector={"type":"infra"}
-openshift_logging_curator_nodeselector={"type":"infra"}
+openshift_logging_es_nodeselector={"type":"${INFRATYPE}"}
+openshift_logging_kibana_nodeselector={"type":"${INFRATYPE}"}
+openshift_logging_curator_nodeselector={"type":"${INFRATYPE}"}
 openshift_master_logging_public_url=https://kibana.$ROUTING
 
 # host group for masters
