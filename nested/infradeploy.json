@@ -76,6 +76,13 @@
                 "description": "Size of infrastructure VMs"
             }
         },
+		"infraLbPublicIpDnsLabel": {
+		    "type": "string",
+			"minLength": 1,
+            "metadata": {
+                "description": "DNS Label name"
+            }
+		},
         "dataDiskSize": {
             "type": "int",
             "metadata": {
@@ -120,9 +127,8 @@
         "diagStorageAccount": "[concat('diag', uniqueString(concat(resourceGroup().id, 'dsa')))]",
         "virtualNetworkName": "openshiftvnet",
         "masterSubnetName": "mastersubnet",
-        "infraLbPublicIpDnsLabel": "[concat('infradns', uniqueString(concat(resourceGroup().id, 'infra')))]",
         "infraLoadBalancerName": "[concat(variables('openshiftInfraHostname'), 'lb')]",
-        "infraPublicIpAddressId": "[resourceId('Microsoft.Network/publicIPAddresses', variables('infraLbPublicIpDnsLabel'))]",
+        "infraPublicIpAddressId": "[resourceId('Microsoft.Network/publicIPAddresses', parameters('infraLbPublicIpDnsLabel'))]",
         "infraLbId": "[resourceId('Microsoft.Network/loadBalancers', variables('infraLoadBalancerName'))]",
         "infraLbFrontEndConfigId": "[concat(variables('infraLbId'), '/frontendIPConfigurations/loadBalancerFrontEnd')]",
         "infraLbBackendPoolId": "[concat(variables('infraLbId'),'/backendAddressPools/loadBalancerBackend')]",
@@ -242,23 +248,6 @@
             }
         },
         {
-            "type": "Microsoft.Network/publicIPAddresses",
-            "name": "[variables('infraLbPublicIpDnsLabel')]",
-            "location": "[resourceGroup().location]",
-            "apiVersion": "[variables('apiVersionNetwork')]",
-            "tags": {
-                "displayName": "InfraLBPublicIP",
-                "provider": "[variables('redHatTags').provider]",
-                "app": "[variables('redHatTags').app]"
-            },
-            "properties": {
-                "publicIPAllocationMethod": "Static",
-                "dnsSettings": {
-                    "domainNameLabel": "[variables('infraLbPublicIpDnsLabel')]"
-                }
-            }
-        },
-        {
             "type": "Microsoft.Compute/availabilitySets",
             "name": "infraavailabilityset",
             "location": "[resourceGroup().location]",
@@ -279,9 +268,6 @@
                 "provider": "[variables('redHatTags').provider]",
                 "app": "[variables('redHatTags').app]"
             },
-            "dependsOn": [
-                "[concat('Microsoft.Network/publicIPAddresses/', variables('infraLbPublicIpDnsLabel'))]"
-            ],
             "properties": {
                 "frontendIPConfigurations": [
                     {
@@ -515,11 +501,5 @@
                 }
             }
         }
-    ],
-    "outputs": {
-        "Openshift Infra Load Balancer FQDN": {
-            "type": "string",
-            "value": "[reference(variables('infraLbPublicIpDnsLabel')).dnsSettings.fqdn]"
-        }
-    }
+    ]
 }
