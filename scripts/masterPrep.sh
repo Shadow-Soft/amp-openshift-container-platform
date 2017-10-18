@@ -15,7 +15,7 @@ sleep 10
 # Register Host with Cloud Access Subscription
 echo $(date) " - Register host with Cloud Access Subscription"
 
-subscription-manager register --username="$RHSMUSERNAME" --password="$RHSMPASSWORD"
+subscription-manager register --username="$RHSMUSERNAME" --password="$RHSMPASSWORD" || subscription-manager register --activationkey="$RHSMUSERNAME" --org="$RHSMPASSWORD"
 
 if [ $? -eq 0 ]
 then
