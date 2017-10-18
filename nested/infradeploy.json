@@ -442,7 +442,7 @@
                 },
                 "parameters": {
                     "location": {
-                        "value": "[variables('location')]"
+                        "value": "[resourceGroup().location]"
                     },
                     "sshKeyPath": {
                         "value": "[variables('sshKeyPath')]"
