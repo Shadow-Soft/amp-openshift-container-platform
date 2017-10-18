@@ -1096,7 +1096,7 @@
 			"properties": {
 				"mode": "Incremental",
 				"templateLink": {
-					"uri": "[variables('infraDeploymentTemplateUrl')]",
+					"uri": "[variables('infraDeploymentTemplateUrl')]"
 				},
 				"parameters": {
 					"baseUrl": {
