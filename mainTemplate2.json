@@ -1221,7 +1221,7 @@
 						"value": "[parameters('aadClientSecret')]"
 					},
 					"nipioDomain": {
-						"value": "[concat(reference(variables('infraLbPublicIpDnsLabel'), variables('apiVersionNetwork')).ipAddress, '.nip.io')]"
+						"value": "[concat(reference(resourceId('Microsoft.Network/publicIPAddresses',variables('infraLbPublicIpDnsLabel')), variables('apiVersionNetwork')).ipAddress, '.nip.io')]"
 					},
 					"customDomain": {
 						"value": "[variables('defaultSubDomain')]"
@@ -1256,7 +1256,7 @@
 		},
 		"Openshift Infra Load Balancer FQDN": {
 			"type": "string",
-			"value": "[reference(variables('infraLbPublicIpDnsLabel'), variables('apiVersionNetwork')).dnsSettings.fqdn]"
+			"value": "[reference(resourceId('Microsoft.Network/publicIPAddresses',variables('infraLbPublicIpDnsLabel')), variables('apiVersionNetwork')).dnsSettings.fqdn]"
 		}
 	}
 }
