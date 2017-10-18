@@ -39,7 +39,7 @@ INFRALOOP=$((INFRACOUNT - 1))
 NODELOOP=$((NODECOUNT - 1))
 
 INFRATYPE="infra"
-if $INFRACOUNT -eq 0
+if [ $INFRACOUNT -eq 0 ]
 then
    INFRATYPE="master"
 fi
