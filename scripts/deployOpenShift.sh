@@ -41,7 +41,7 @@ NODELOOP=$((NODECOUNT - 1))
 INFRATYPE="infra"
 if [ $INFRACOUNT -eq 0 ]
 then
-   INFRATYPE="master"
+   INFRATYPE="app"
 fi
 
 # Generate private keys for use by Ansible

@@ -76,13 +76,27 @@
                 "description": "Size of infrastructure VMs"
             }
         },
-	"infraLbPublicIpDnsLabel": {
-	    "type": "string",
-	    "minLength": 1,
+		"newStorageAccountInfra": {
+		    "type": "string",
+	        "minLength": 1,
+            "metadata": {
+                "description": "Name of infra storage account"
+            }
+		},
+		"infraAvailabilitySet": {
+		    "type": "string",
+	        "minLength": 1,
+            "metadata": {
+                "description": "Name of infra availabilitySet"
+            }
+		},
+	    "infraLbPublicIpDnsLabel": {
+	        "type": "string",
+	        "minLength": 1,
             "metadata": {
                 "description": "DNS Label name"
             }
-	},
+	    },
         "dataDiskSize": {
             "type": "int",
             "metadata": {
@@ -123,7 +137,6 @@
         "apiVersionStorage": "[parameters('apiVersionStorage')]",
         "apiVersionLinkTemplate": "[parameters('apiVersionLinkTemplate')]",
         "openshiftInfraHostname": "[parameters('openshiftInfraHostname')]",
-        "newStorageAccountInfra": "[concat('infra', uniqueString(concat(resourceGroup().id, 'isa')))]",
         "diagStorageAccount": "[concat('diag', uniqueString(concat(resourceGroup().id, 'dsa')))]",
         "virtualNetworkName": "openshiftvnet",
         "masterSubnetName": "mastersubnet",
@@ -229,33 +242,6 @@
                         }
                     }
                 ]
-            }
-        },
-        {
-            "type": "Microsoft.Storage/storageAccounts",
-            "name": "[variables('newStorageAccountInfra')]",
-            "location": "[resourceGroup().location]",
-            "kind": "Storage",
-            "apiVersion": "[variables('apiVersionStorage')]",
-            "tags": {
-                "displayName": "InfraStorageAccount",
-                "provider": "[variables('redHatTags').provider]",
-                "app": "[variables('redHatTags').app]"
-            },
-            "sku": {
-                "name": "Premium_LRS",
-                "tier": "Premium"
-            }
-        },
-        {
-            "type": "Microsoft.Compute/availabilitySets",
-            "name": "infraavailabilityset",
-            "location": "[resourceGroup().location]",
-            "apiVersion": "[variables('apiVersionCompute')]",
-            "tags": {
-                "displayName": "InfraAvailabilitySet",
-                "provider": "[variables('redHatTags').provider]",
-                "app": "[variables('redHatTags').app]"
             }
         },
         {
@@ -413,8 +399,7 @@
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "[variables('apiVersionLinkTemplate')]",
             "dependsOn": [
-                "infraNicLoop",
-                "infraavailabilityset"
+                "infraNicLoop"
             ],
             "copy": {
                 "name": "infraVmLoop",
@@ -446,7 +431,7 @@
                         "value": "[variables('infraVmSize')]"
                     },
                     "availabilitySet": {
-                        "value": "infraavailabilityset"
+                        "value": "[parameters('infraAvailabilitySet')"
                     },
                     "hostname": {
                         "value": "[concat(variables('openshiftInfraHostname'), '-', copyIndex())]"
@@ -455,7 +440,7 @@
                         "value": "infranode"
                     },
                     "newStorageAccount": {
-                        "value": "[variables('newStorageAccountInfra')]"
+                        "value": "[parameters('newStorageAccountInfra')]"
                     },
                     "diagStorageAccount": {
                         "value": "[variables('diagStorageAccount')]"

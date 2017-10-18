@@ -1,4 +1,4 @@
-﻿{
+{
 	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json",
 	"contentVersion": "1.0.0.0",
 	"parameters": {
@@ -8,11 +8,10 @@
 				"description": "Base URL for Marketplace Deployment",
 				"artifactsBaseUrl": ""
 			},
-			"defaultValue": "https://raw.githubusercontent.com/Shadow-Soft/amp-openshift-container-platform/master"
+			"defaultValue": "https://raw.githubusercontent.com/Microsoft/openshift-container-platform/master"
 		},		
 		"location": {
 		  "type": "string",
-		  "defaultValue": "eastus",
 		  "metadata": {
 			"description": "Location"
 		  }
@@ -36,9 +35,9 @@
 		},
 		"clusterSize": {
 			"type": "string",
-			"defaultValue": "small",
+			"defaultValue": "medium",
 			"allowedValues": [
-				"extrasmall","small", "medium", "large"
+				"small", "medium", "large"
 			],
 			"minLength": 1,
 			"metadata": {
@@ -206,15 +205,6 @@
 		"nodeInstanceCount": "[variables('clusterSizeMap')[parameters('clusterSize')].nodeVmCount]",
 		"dataDiskSize": "[variables('clusterSizeMap')[parameters('clusterSize')].dataDiskSize]",
 		"clusterSizeMap": {
-			"extrasmall": {
-				"masterVmSize": "Standard_DS2_v2",
-				"masterVmCount": 1,
-				"infraVmSize": "Standard_DS2_v2",
-				"infraVmCount": 0,
-				"nodeVmSize": "Standard_DS2_v2",
-				"nodeVmCount": 1,
-				"dataDiskSize": 128
-			},
 			"small": {
 				"masterVmSize": "Standard_DS2_v2",
 				"masterVmCount": 1,
@@ -264,7 +254,23 @@
 		"masterPrepScriptFileName": "masterPrep.sh",
 		"clusterNodeDeploymentTemplateUrl": "[concat(parameters('baseUrl'), '/nested/galleryclusternode.json')]",
 		"basicDeploymentTemplateUrl": "[concat(parameters('baseUrl'), '/nested/gallerybasic.json')]",
-		"openshiftDeploymentTemplateUrl": "[concat(parameters('baseUrl'), '/nested/openshiftdeploy.json')]"
+		"openshiftDeploymentTemplateUrl": "[concat(parameters('baseUrl'), '/nested/openshiftdeploy.json')]",
+		"newStorageAccountArray": [
+			{ "name": "[variables('newStorageAccountBastion')]", "tagName": "BastionStorageAccount", "skuName": "Premium_LRS", "skuTier": "Premium" },
+			{ "name": "[variables('newStorageAccountMaster')]", "tagName": "MasterStorageAccount", "skuName": "Premium_LRS", "skuTier": "Premium" },
+			{ "name": "[variables('newStorageAccountInfra')]", "tagName": "InfraStorageAccount", "skuName": "Premium_LRS", "skuTier": "Premium" },
+			{ "name": "[variables('newStorageAccountNode')]", "tagName": "NodeStorageAccount", "skuName": "Premium_LRS", "skuTier": "Premium" },
+			{ "name": "[variables('diagStorageAccount')]", "tagName": "DiagnosticsStorageAccount", "skuName": "Standard_LRS", "skuTier": "Standard" },
+			{ "name": "[variables('newStorageAccountRegistry')]", "tagName": "RegistryStorageAccount", "skuName": "Standard_LRS", "skuTier": "Standard" },
+			{ "name": "[variables('newStorageAccountPersistentVolume1')]", "tagName": "PersistentVolume1StorageAccount", "skuName": "[variables('persistentVolume1Type')]", "skuTier": "[variables('persistentVolume1Tier')]" }
+		],
+		"newStorageAccountArrayCount": 7,
+		"availabilitySetArray": [
+			{ "name": "masteravailabilityset", "tagName": "MasterAvailabilitySet" },
+			{ "name": "infraavailabilityset", "tagName": "InfraAvailabilitySet" },
+			{ "name": "nodeavailabilityset", "tagName": "NodeAvailabilitySet" }
+		],
+		"availabilitySetArrayCount": 3
 	},
 	"resources": [
 		{
@@ -516,108 +522,22 @@
 			}
 		}, {
 			"type": "Microsoft.Storage/storageAccounts",
-			"name": "[variables('newStorageAccountBastion')]",
+			"name": "[variables('newStorageAccountArray')[copyIndex()].name]",
 			"location": "[parameters('location')]",
 			"kind": "Storage",
 			"apiVersion": "[variables('apiVersionStorage')]",
 			"tags": {
-				"displayName": "BastionStorageAccount",
+				"displayName": "[variables('newStorageAccountArray')[copyIndex()].tagName]",
 				"provider": "[variables('redHatTags').provider]",
 				"app": "[variables('redHatTags').app]"
 			},
-			"sku": {
-				"name": "Premium_LRS",
-				"tier": "Premium"
-			}
-		}, {
-			"type": "Microsoft.Storage/storageAccounts",
-			"name": "[variables('newStorageAccountMaster')]",
-			"location": "[parameters('location')]",
-			"kind": "Storage",
-			"apiVersion": "[variables('apiVersionStorage')]",
-			"tags": {
-				"displayName": "MasterStorageAccount",
-				"provider": "[variables('redHatTags').provider]",
-				"app": "[variables('redHatTags').app]"
+			"copy": {
+				"name": "storageLoop",
+				"count": "[variables('newStorageAccountArrayCount')]"
 			},
 			"sku": {
-				"name": "Premium_LRS",
-				"tier": "Premium"
-			}
-		}, {
-			"type": "Microsoft.Storage/storageAccounts",
-			"name": "[variables('newStorageAccountInfra')]",
-			"location": "[parameters('location')]",
-			"kind": "Storage",
-			"apiVersion": "[variables('apiVersionStorage')]",
-			"tags": {
-				"displayName": "InfraStorageAccount",
-				"provider": "[variables('redHatTags').provider]",
-				"app": "[variables('redHatTags').app]"
-			},
-			"sku": {
-				"name": "Premium_LRS",
-				"tier": "Premium"
-			}
-		}, {
-			"type": "Microsoft.Storage/storageAccounts",
-			"name": "[variables('newStorageAccountNode')]",
-			"location": "[parameters('location')]",
-			"kind": "Storage",
-			"apiVersion": "[variables('apiVersionStorage')]",
-			"tags": {
-				"displayName": "NodeStorageAccount",
-				"provider": "[variables('redHatTags').provider]",
-				"app": "[variables('redHatTags').app]"
-			},
-			"sku": {
-				"name": "Premium_LRS",
-				"tier": "Premium"
-			}
-		}, {
-			"type": "Microsoft.Storage/storageAccounts",
-			"name": "[variables('diagStorageAccount')]",
-			"location": "[parameters('location')]",
-			"kind": "Storage",
-			"apiVersion": "[variables('apiVersionStorage')]",
-			"tags": {
-				"displayName": "DiagnosticsStorageAccount",
-				"provider": "[variables('redHatTags').provider]",
-				"app": "[variables('redHatTags').app]"
-			},
-			"sku": {
-				"name": "Standard_LRS",
-				"tier": "Standard"
-			}
-		}, {
-			"type": "Microsoft.Storage/storageAccounts",
-			"name": "[variables('newStorageAccountRegistry')]",
-			"location": "[parameters('location')]",
-			"kind": "Storage",
-			"apiVersion": "[variables('apiVersionStorage')]",
-			"tags": {
-				"displayName": "RegistryStorageAccount",
-				"provider": "[variables('redHatTags').provider]",
-				"app": "[variables('redHatTags').app]"
-			},
-			"sku": {
-				"name": "Standard_LRS",
-				"tier": "Standard"
-			}
-		}, {
-			"type": "Microsoft.Storage/storageAccounts",
-			"name": "[variables('newStorageAccountPersistentVolume1')]",
-			"location": "[parameters('location')]",
-			"kind": "Storage",
-			"apiVersion": "[variables('apiVersionStorage')]",
-			"tags": {
-				"displayName": "PersistentVolume1StorageAccount",
-				"provider": "[variables('redHatTags').provider]",
-				"app": "[variables('redHatTags').app]"
-			},
-			"sku": {
-				"name": "[variables('persistentVolume1Type')]",
-				"tier": "[variables('persistentVolume1Tier')]"
+				"name": "[variables('newStorageAccountArray')[copyIndex()].skuName]",
+				"tier": "[variables('newStorageAccountArray')[copyIndex()].skuTier]"
 			}
 		}, {
 			"type": "Microsoft.Network/publicIPAddresses",
@@ -669,33 +589,17 @@
 			}
 		}, {
 			"type": "Microsoft.Compute/availabilitySets",
-			"name": "masteravailabilityset",
+			"name": "[variables('availabilitySetArray')[copyIndex()].name]",
 			"location": "[parameters('location')]",
 			"apiVersion": "[variables('apiVersionCompute')]",
 			"tags": {
-				"displayName": "MasterAvailabilitySet",
+				"displayName": "[variables('availabilitySetArray')[copyIndex()].tagName]",
 				"provider": "[variables('redHatTags').provider]",
 				"app": "[variables('redHatTags').app]"
-			}
-		}, {
-			"type": "Microsoft.Compute/availabilitySets",
-			"name": "infraavailabilityset",
-			"location": "[parameters('location')]",
-			"apiVersion": "[variables('apiVersionCompute')]",
-			"tags": {
-				"displayName": "InfraAvailabilitySet",
-				"provider": "[variables('redHatTags').provider]",
-				"app": "[variables('redHatTags').app]"
-			}
-		}, {
-			"type": "Microsoft.Compute/availabilitySets",
-			"name": "nodeavailabilityset",
-			"location": "[parameters('location')]",
-			"apiVersion": "[variables('apiVersionCompute')]",
-			"tags": {
-				"displayName": "NodeAvailabilitySet",
-				"provider": "[variables('redHatTags').provider]",
-				"app": "[variables('redHatTags').app]"
+			},
+			"copy": {
+				"name": "availabiltySetLoop",
+				"count": "[variables('availabilitySetArrayCount')]"
 			}
 		}, {
 			"type": "Microsoft.Network/loadBalancers",
