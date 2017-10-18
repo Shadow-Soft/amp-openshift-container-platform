@@ -76,13 +76,13 @@
                 "description": "Size of infrastructure VMs"
             }
         },
-		"infraLbPublicIpDnsLabel": {
-		    "type": "string",
-			"minLength": 1,
+	"infraLbPublicIpDnsLabel": {
+	    "type": "string",
+	    "minLength": 1,
             "metadata": {
                 "description": "DNS Label name"
             }
-		},
+	},
         "dataDiskSize": {
             "type": "int",
             "metadata": {
