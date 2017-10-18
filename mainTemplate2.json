@@ -1066,7 +1066,6 @@
 			}
 		},
 		{
-		    "condition": "[less(variables('infraInstanceCount'),1)]",
 		    "type": "Microsoft.Network/publicIPAddresses",
 		    "name": "[variables('infraLbPublicIpDnsLabel')]",
 		    "location": "[resourceGroup().location]",
@@ -1090,7 +1089,8 @@
 			"apiVersion": "[variables('apiVersionLinkTemplate')]",
 			"dependsOn": [
 				"[concat('Microsoft.Network/virtualNetworks/', variables('virtualNetworkName'))]",
-				"[resourceId('Microsoft.Storage/storageAccounts', variables('diagStorageAccount'))]"
+				"[resourceId('Microsoft.Storage/storageAccounts', variables('diagStorageAccount'))]",
+				"[resourceId('Microsoft.Network/publicIPAddresses', variables('infraLbPublicIpDnsLabel'))]"
 			],
 			"properties": {
 				"mode": "Incremental",
@@ -1124,6 +1124,9 @@
 					},
 					"infraVmSize": {
 						"value": "[variables('infraVmSize')]"
+					},
+					"infraLbPublicIpDnsLabel": {
+						"value": "[variables('infraLbPublicIpDnsLabel')]"
 					},
 					"dataDiskSize": {
 						"value": "[variables('dataDiskSize')]"
@@ -1221,7 +1224,7 @@
 						"value": "[parameters('aadClientSecret')]"
 					},
 					"nipioDomain": {
-						"value": "[concat(reference(resourceId('Microsoft.Network/publicIPAddresses',variables('infraLbPublicIpDnsLabel')), variables('apiVersionNetwork')).ipAddress, '.nip.io')]"
+						"value": "[concat(reference(variables('infraLbPublicIpDnsLabel'), variables('apiVersionNetwork')).ipAddress, '.nip.io')]"
 					},
 					"customDomain": {
 						"value": "[variables('defaultSubDomain')]"
@@ -1256,7 +1259,7 @@
 		},
 		"Openshift Infra Load Balancer FQDN": {
 			"type": "string",
-			"value": "[reference(resourceId('Microsoft.Network/publicIPAddresses',variables('infraLbPublicIpDnsLabel')), variables('apiVersionNetwork')).dnsSettings.fqdn]"
+			"value": "[reference(variables('infraLbPublicIpDnsLabel'), variables('apiVersionNetwork')).dnsSettings.fqdn]"
 		}
 	}
 }
