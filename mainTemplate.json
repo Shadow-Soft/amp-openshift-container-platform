@@ -9,12 +9,12 @@
 				"artifactsBaseUrl": ""
 			},
 			"defaultValue": "https://raw.githubusercontent.com/Shadow-Soft/amp-openshift-container-platform/master"
-		},		
+		},
 		"location": {
-		  "type": "string",
-		  "metadata": {
-			"description": "Location"
-		  }
+			"type": "string",
+			"metadata": {
+				"description": "Location"
+			}
 		},
 		"openshiftClusterPrefix": {
 			"type": "string",
@@ -42,7 +42,7 @@
 			"minLength": 1,
 			"metadata": {
 				"description": "Administrator username on all VMs and first user created for OpenShift login"
-			}		
+			}
 		},
 		"openshiftPassword": {
 			"type": "securestring",
@@ -184,7 +184,7 @@
 		"bastionPublicIpDnsLabel": "[concat('bastiondns', uniqueString(resourceGroup().id))]",
 		"persistentVolume1Type": "Standard_LRS",
 		"persistentVolume1Tier": "Standard",
-		
+
 		"masterLoadBalancerName": "[concat(variables('openshiftMasterHostname'), 'lb')]",
 		"masterPublicIpAddressId": "[resourceId('Microsoft.Network/publicIPAddresses', variables('openshiftMasterPublicIpDnsLabel'))]",
 		"masterLbId": "[resourceId('Microsoft.Network/loadBalancers', variables('masterLoadBalancerName'))]",
@@ -193,7 +193,7 @@
 		"masterLbHttpProbeId": "[concat(variables('masterLbId'),'/probes/httpProbe')]",
 		"masterLb8443ProbeId": "[concat(variables('masterLbId'),'/probes/8443Probe')]",
 		"masterLbCockpitProbeId": "[concat(variables('masterLbId'),'/probes/cockpitProbe')]",
-		
+
 		"infraLoadBalancerName": "[concat(variables('openshiftInfraHostname'), 'lb')]",
 		"infraPublicIpAddressId": "[resourceId('Microsoft.Network/publicIPAddresses', variables('infraLbPublicIpDnsLabel'))]",
 		"infraLbId": "[resourceId('Microsoft.Network/loadBalancers', variables('infraLoadBalancerName'))]",
@@ -274,25 +274,66 @@
 		"clusterNodeDeploymentTemplateUrl": "[concat(parameters('baseUrl'), '/nested/galleryclusternode.json')]",
 		"basicDeploymentTemplateUrl": "[concat(parameters('baseUrl'), '/nested/gallerybasic.json')]",
 		"openshiftDeploymentTemplateUrl": "[concat(parameters('baseUrl'), '/nested/openshiftdeploy.json')]",
-		"newStorageAccountArray": [
-			{ "name": "[variables('newStorageAccountBastion')]", "tagName": "BastionStorageAccount", "skuName": "Premium_LRS", "skuTier": "Premium" },
-			{ "name": "[variables('newStorageAccountMaster')]", "tagName": "MasterStorageAccount", "skuName": "Premium_LRS", "skuTier": "Premium" },
-			{ "name": "[variables('newStorageAccountInfra')]", "tagName": "InfraStorageAccount", "skuName": "Premium_LRS", "skuTier": "Premium" },
-			{ "name": "[variables('newStorageAccountNode')]", "tagName": "NodeStorageAccount", "skuName": "Premium_LRS", "skuTier": "Premium" },
-			{ "name": "[variables('diagStorageAccount')]", "tagName": "DiagnosticsStorageAccount", "skuName": "Standard_LRS", "skuTier": "Standard" },
-			{ "name": "[variables('newStorageAccountRegistry')]", "tagName": "RegistryStorageAccount", "skuName": "Standard_LRS", "skuTier": "Standard" },
-			{ "name": "[variables('newStorageAccountPersistentVolume1')]", "tagName": "PersistentVolume1StorageAccount", "skuName": "[variables('persistentVolume1Type')]", "skuTier": "[variables('persistentVolume1Tier')]" }
+		"newStorageAccountArray": [{
+				"name": "[variables('newStorageAccountBastion')]",
+				"tagName": "BastionStorageAccount",
+				"skuName": "Premium_LRS",
+				"skuTier": "Premium"
+			},
+			{
+				"name": "[variables('newStorageAccountMaster')]",
+				"tagName": "MasterStorageAccount",
+				"skuName": "Premium_LRS",
+				"skuTier": "Premium"
+			},
+			{
+				"name": "[variables('newStorageAccountInfra')]",
+				"tagName": "InfraStorageAccount",
+				"skuName": "Premium_LRS",
+				"skuTier": "Premium"
+			},
+			{
+				"name": "[variables('newStorageAccountNode')]",
+				"tagName": "NodeStorageAccount",
+				"skuName": "Premium_LRS",
+				"skuTier": "Premium"
+			},
+			{
+				"name": "[variables('diagStorageAccount')]",
+				"tagName": "DiagnosticsStorageAccount",
+				"skuName": "Standard_LRS",
+				"skuTier": "Standard"
+			},
+			{
+				"name": "[variables('newStorageAccountRegistry')]",
+				"tagName": "RegistryStorageAccount",
+				"skuName": "Standard_LRS",
+				"skuTier": "Standard"
+			},
+			{
+				"name": "[variables('newStorageAccountPersistentVolume1')]",
+				"tagName": "PersistentVolume1StorageAccount",
+				"skuName": "[variables('persistentVolume1Type')]",
+				"skuTier": "[variables('persistentVolume1Tier')]"
+			}
 		],
 		"newStorageAccountArrayCount": 7,
-		"availabilitySetArray": [
-			{ "name": "masteravailabilityset", "tagName": "MasterAvailabilitySet" },
-			{ "name": "infraavailabilityset", "tagName": "InfraAvailabilitySet" },
-			{ "name": "nodeavailabilityset", "tagName": "NodeAvailabilitySet" }
+		"availabilitySetArray": [{
+				"name": "masteravailabilityset",
+				"tagName": "MasterAvailabilitySet"
+			},
+			{
+				"name": "infraavailabilityset",
+				"tagName": "InfraAvailabilitySet"
+			},
+			{
+				"name": "nodeavailabilityset",
+				"tagName": "NodeAvailabilitySet"
+			}
 		],
 		"availabilitySetArrayCount": 3
 	},
-	"resources": [
-		{
+	"resources": [{
 			"apiVersion": "[variables('apiVersionNetwork')]",
 			"type": "Microsoft.Network/networkSecurityGroups",
 			"name": "[concat(variables('openshiftBastionHostname'), '-nsg')]",
@@ -537,6 +578,7 @@
 					"properties": {
 						"addressPrefix": "[variables('nodeSubnetPrefix')]"
 					}
+				}, {
 					"name": "[variables('infraSubnetName')]",
 					"properties": {
 						"addressPrefix": "[variables('infraSubnetPrefix')]"
@@ -704,7 +746,7 @@
 					}
 				}]
 			}
-		},	
+		},
 		{
 			"apiVersion": "[variables('apiVersionNetwork')]",
 			"type": "Microsoft.Network/loadBalancers/inboundNatRules",
@@ -728,7 +770,7 @@
 				"backendPort": 22,
 				"enableFloatingIP": false
 			}
-		},		
+		},
 		{
 			"type": "Microsoft.Network/loadBalancers",
 			"name": "[variables('infraLoadBalancerName')]",
@@ -891,11 +933,9 @@
 						"loadBalancerBackendAddressPools": [{
 							"id": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourceGroup().name, '/providers/Microsoft.Network/loadBalancers/', variables('masterLoadBalancerName'), '/backendAddressPools/loadBalancerBackEnd')]"
 						}],
-						"loadBalancerInboundNatRules": [
-							{
-								"id": "[concat(variables('masterLbId'),'/inboundNatRules/SSH-', variables('openshiftMasterHostname'), copyIndex())]"
-							}
-						]
+						"loadBalancerInboundNatRules": [{
+							"id": "[concat(variables('masterLbId'),'/inboundNatRules/SSH-', variables('openshiftMasterHostname'), copyIndex())]"
+						}]
 					}
 				}],
 				"networkSecurityGroup": {
@@ -1389,7 +1429,7 @@
 					},
 					"infraSubnet": {
 						"value": "[variables('infraSubnet')]"
-					}
+					},
 					"nodeInstanceCount": {
 						"value": "[variables('nodeInstanceCount')]"
 					},
