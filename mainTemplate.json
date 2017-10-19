@@ -65,11 +65,18 @@
 				"description": "Red Hat Subscription Manager Password or Activation Key. To find or create your Activation Key, go to: https://access.redhat.com/management/activation_keys"
 			}
 		},
-		"rhsmPoolId": {
+		"osPoolId": {
 			"type": "string",
 			"minLength": 1,
 			"metadata": {
 				"description": "Red Hat Subscription Manager Pool ID with OpenShift entitlements. To find it, run on registered server: subscription-manager list"
+			}
+		},
+		"stPoolId": {
+			"type": "string",
+			"minLength": 1,
+			"metadata": {
+				"description": "Red Hat Subscription Manager Pool ID with Storage entitlements. To find it, run on registered server: subscription-manager list"
 			}
 		},
 		"sshPublicKey": {
@@ -163,9 +170,12 @@
 		"newStorageAccountRegistry": "[concat('registry', uniqueString(concat(resourceGroup().id, 'registry')))]",
 		"newStorageAccountPersistentVolume1": "[concat('pv1sa', uniqueString(concat(resourceGroup().id, 'persistentvolume1')))]",
 		"addressPrefix": "10.0.0.0/8",
+		"infraSubnet": "10.3.0.",
+		"infraSubnetPrefix": "[concat(variables('infraSubnet'),'0/16')",
 		"masterSubnetPrefix": "10.1.0.0/16",
 		"nodeSubnetPrefix": "10.2.0.0/16",
 		"virtualNetworkName": "openshiftvnet",
+		"infraSubnetName": "infrasubnet",
 		"masterSubnetName": "mastersubnet",
 		"nodeSubnetName": "nodesubnet",
 		"infraLbPublicIpDnsLabel": "[concat('infradns', uniqueString(concat(resourceGroup().id, 'infra')))]",
@@ -526,6 +536,10 @@
 					"name": "[variables('nodeSubnetName')]",
 					"properties": {
 						"addressPrefix": "[variables('nodeSubnetPrefix')]"
+					}
+					"name": "[variables('infraSubnetName')]",
+					"properties": {
+						"addressPrefix": "[variables('infraSubnetPrefix')]"
 					}
 				}]
 			}
@@ -911,9 +925,10 @@
 				"ipConfigurations": [{
 					"name": "[concat(variables('openshiftInfraHostname'), copyIndex(), 'ipconfig')]",
 					"properties": {
-						"privateIPAllocationMethod": "Dynamic",
+						"privateIPAllocationMethod": "Static",
+						"privateIPAddress": "[concat(variables('infraSubnet'),copyIndex(4))]",
 						"subnet": {
-							"id": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourceGroup().name, '/providers/Microsoft.Network/virtualNetworks/', variables('virtualNetworkName'), '/subnets/', variables('masterSubnetName'))]"
+							"id": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourceGroup().name, '/providers/Microsoft.Network/virtualNetworks/', variables('virtualNetworkName'), '/subnets/', variables('infraSubnetName'))]"
 						},
 						"loadBalancerBackendAddressPools": [{
 							"id": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourceGroup().name, '/providers/Microsoft.Network/loadBalancers/', variables('infraLoadBalancerName'), '/backendAddressPools/loadBalancerBackEnd')]"
@@ -1217,7 +1232,7 @@
 					]
 				},
 				"protectedSettings": {
-					"commandToExecute": "[concat('bash ', variables('bastionPrepScriptFileName'), ' ', parameters('rhsmUsername'), ' ',variables('singlequote'), parameters('rhsmPassword'), variables('singlequote'), ' ', parameters('rhsmPoolId'))]"
+					"commandToExecute": "[concat('bash ', variables('bastionPrepScriptFileName'), ' ', parameters('rhsmUsername'), ' ',variables('singlequote'), parameters('rhsmPassword'), variables('singlequote'), ' ', parameters('osPoolId'), ' ', parameters('stPoolId'))]"
 				}
 			}
 		}, {
@@ -1248,7 +1263,7 @@
 					]
 				},
 				"protectedSettings": {
-					"commandToExecute": "[concat('bash ', variables('masterPrepScriptFileName'), ' ', parameters('rhsmUsername'), ' ', variables('singlequote'), parameters('rhsmPassword'), variables('singlequote'), ' ', parameters('rhsmPoolId'), ' ', variables('newStorageAccountPersistentVolume1'), ' ', parameters('adminUsername'))]"
+					"commandToExecute": "[concat('bash ', variables('masterPrepScriptFileName'), ' ', parameters('rhsmUsername'), ' ', variables('singlequote'), parameters('rhsmPassword'), variables('singlequote'), ' ', parameters('osPoolId'), ' ', variables('newStorageAccountPersistentVolume1'), ' ', parameters('adminUsername'), ' ', parameters('stPoolId'))]"
 				}
 			}
 		}, {
@@ -1279,7 +1294,7 @@
 					]
 				},
 				"protectedSettings": {
-					"commandToExecute": "[concat('bash ', variables('nodePrepScriptFileName'), ' ', parameters('rhsmUsername'), ' ', variables('singlequote'), parameters('rhsmPassword'), variables('singlequote'), ' ', parameters('rhsmPoolId'))]"
+					"commandToExecute": "[concat('bash ', variables('nodePrepScriptFileName'), ' ', parameters('rhsmUsername'), ' ', variables('singlequote'), parameters('rhsmPassword'), variables('singlequote'), ' ', parameters('osPoolId'), ' ', parameters('stPoolId'))]"
 				}
 			}
 		}, {
@@ -1310,7 +1325,7 @@
 					]
 				},
 				"protectedSettings": {
-					"commandToExecute": "[concat('bash ', variables('nodePrepScriptFileName'), ' ', parameters('rhsmUsername'), ' ', variables('singlequote'), parameters('rhsmPassword'), variables('singlequote'), ' ', parameters('rhsmPoolId'))]"
+					"commandToExecute": "[concat('bash ', variables('nodePrepScriptFileName'), ' ', parameters('rhsmUsername'), ' ', variables('singlequote'), parameters('rhsmPassword'), variables('singlequote'), ' ', parameters('osPoolId'), ' ', parameters('stPoolId'))]"
 				}
 			}
 		}, {
@@ -1372,6 +1387,9 @@
 					"infraInstanceCount": {
 						"value": "[variables('infraInstanceCount')]"
 					},
+					"infraSubnet": {
+						"value": "[variables('infraSubnet')]"
+					}
 					"nodeInstanceCount": {
 						"value": "[variables('nodeInstanceCount')]"
 					},

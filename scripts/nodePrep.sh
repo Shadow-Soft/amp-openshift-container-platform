@@ -3,7 +3,8 @@ echo $(date) " - Starting Infra / Node Prep Script"
 
 RHSMUSERNAME=$1
 RHSMPASSWORD="$2"
-POOL_ID=$3
+OS_POOL_ID=$3
+STOR_POOL_ID=$4
 
 # Remove RHUI
 
@@ -23,7 +24,7 @@ else
    exit 3
 fi
 
-subscription-manager attach --pool=$POOL_ID > attach.log
+subscription-manager attach --pool=$OS_POOL_ID > attach.log
 if [ $? -eq 0 ]
 then
    echo "Pool attached successfully"
@@ -31,7 +32,22 @@ else
    evaluate=$( cut -f 2-5 -d ' ' attach.log )
    if [[ $evaluate == "unit has already had" ]]
       then
-         echo "Pool $POOL_ID was already attached and was not attached again."
+         echo "Pool $OS_POOL_ID for OpenShift was already attached and was not attached again."
+	  else
+         echo "Incorrect Pool ID or no entitlements available"
+         exit 4
+   fi
+fi
+
+subscription-manager attach --pool=$STOR_POOL_ID > attach.log
+if [ $? -eq 0 ]
+then
+   echo "Pool attached successfully"
+else
+   evaluate=$( cut -f 2-5 -d ' ' attach.log )
+   if [[ $evaluate == "unit has already had" ]]
+      then
+         echo "Pool $STOR_POOL_ID for Storage was already attached and was not attached again."
 	  else
          echo "Incorrect Pool ID or no entitlements available"
          exit 4
@@ -47,7 +63,8 @@ subscription-manager repos \
     --enable="rhel-7-server-rpms" \
     --enable="rhel-7-server-extras-rpms" \
     --enable="rhel-7-server-ose-3.6-rpms" \
-    --enable="rhel-7-fast-datapath-rpms"
+    --enable="rhel-7-fast-datapath-rpms" \
+	--enable="rh-gluster-3-client-for-rhel-7-server-rpms"
 
 # Install base packages and update system to latest packages
 echo $(date) " - Install base packages and update system to latest packages"
@@ -60,7 +77,8 @@ subscription-manager repos \
     --enable="rhel-7-server-rpms" \
     --enable="rhel-7-server-extras-rpms" \
     --enable="rhel-7-server-ose-3.6-rpms" \
-    --enable="rhel-7-fast-datapath-rpms" 
+    --enable="rhel-7-fast-datapath-rpms" \
+	--enable="rh-gluster-3-client-for-rhel-7-server-rpms" 
 
 yum -y install atomic-openshift-excluder atomic-openshift-docker-excluder
 

@@ -27,6 +27,7 @@ export RESOURCEGROUP=${20}
 export LOCATION=${21}
 STORAGEACCOUNT1=${22}
 SAKEY1=${23}
+INFRASUBNET=${24}
 
 export BASTION=$(hostname)
 
@@ -39,10 +40,6 @@ INFRALOOP=$((INFRACOUNT - 1))
 NODELOOP=$((NODECOUNT - 1))
 
 export INFRATYPE="infra"
-if [ $INFRACOUNT -eq 0 ]
-then
-   export INFRATYPE="app"
-fi
 
 # Copying files to $SUDOUSER home directory
 currentDir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
@@ -94,6 +91,14 @@ fi
 # Create Ansible Hosts File
 echo $(date) " - Create Ansible Hosts file"
 
+# Build glusterfs node list
+glusterInfo="${INFRASUBNET}4 glusterfs_ip=${INFRASUBNET}4 glusterfs_devices='[ \"/dev/sdd\" ]'"
+for (( c=1; c<$INFRACOUNT; c++ ))
+	do
+	  glusterInfo="$glusterInfo
+	  "${INFRASUBNET}$((c+4)) glusterfs_ip=${INFRASUBNET}$((c+4)) glusterfs_devices='[ \"/dev/sdd\" ]'""
+	done
+
 if [ $MASTERCOUNT -eq 1 ]
 then
 
@@ -103,6 +108,7 @@ then
 masters
 nodes
 master0
+glusterfs
 new_nodes
 
 # Set variables common for all OSEv3 hosts
@@ -122,6 +128,10 @@ console_port=443
 openshift_cloudprovider_kind=azure
 osm_default_node_selector='type=app'
 openshift_disable_check=memory_availability,docker_image_availability
+
+#Cloud Native Container Storage
+openshift_storage_glusterfs_namespace=glusterfs 
+openshift_storage_glusterfs_name=storage
 
 # default selectors for router and registry services
 openshift_router_selector='type=${INFRATYPE}'
@@ -159,6 +169,9 @@ $MASTER-0
 [master0]
 $MASTER-0
 
+[glusterfs]
+$glusterInfo
+
 # host group for nodes
 [nodes]
 $MASTER-0 openshift_node_labels="{'type': 'master', 'zone': 'default'}" openshift_hostname=$MASTER-0
@@ -173,6 +186,7 @@ masters
 nodes
 etcd
 master0
+glusterfs
 new_nodes
 
 # Set variables common for all OSEv3 hosts
@@ -192,6 +206,10 @@ console_port=443
 openshift_cloudprovider_kind=azure
 osm_default_node_selector='type=app'
 openshift_disable_check=memory_availability,docker_image_availability
+
+#Cloud Native Container Storage
+openshift_storage_glusterfs_namespace=glusterfs 
+openshift_storage_glusterfs_name=storage
 
 # default selectors for router and registry services
 openshift_router_selector='type=${INFRATYPE}'
@@ -233,6 +251,9 @@ $MASTER-[0:${MASTERLOOP}]
 
 [master0]
 $MASTER-0
+
+[glusterfs]
+$glusterInfo
 
 # host group for nodes
 [nodes]
