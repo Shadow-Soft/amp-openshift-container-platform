@@ -1,0 +1,60 @@
+﻿{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"location": {
+			"value": "eastus"
+		},
+		"openshiftClusterPrefix": {
+			"value": "mycluster"
+		},
+		"adminUsername": {
+			"value": "ocpadmin"
+		},
+		"clusterSize": {
+			"value": "testdrive"
+		},
+		"openshiftPassword": {
+			"value": "GEN-PASSWORD"
+		},
+		"rhsmUsername": {
+			"value": "GEN-UNIQUE"
+		},
+		"rhsmPassword": {
+			"value": "changeme"
+		},
+		"osPoolId": {
+			"value": "GEN-UNIQUE"
+		},
+		"stPoolId": {
+			"value": "GEN-UNIQUE"
+		},
+		"sshPublicKey": {
+			"value": "GEN-SSH-PUB-KEY"
+		},
+		"keyVaultResourceGroup": {
+			"value": "GEN-UNIQUE"
+		},
+		"keyVaultName": {
+			"value": "GEN-UNIQUE"
+		},
+		"keyVaultSecret": {
+			"value": "GEN-UNIQUE"
+		},
+		"enableAzure": {
+			"value": "true"
+		},
+		"aadClientId": {
+			"value": "GEN-UNIQUE"
+		},
+		"aadClientSecret": {
+			"value": "GEN-PASSWORD"
+		},
+		"defaultSubDomainType": {
+			"value": "custom"
+		},
+		"defaultSubDomain": {
+			"value": "domain.com"
+		}
+	}
+}
