@@ -1,0 +1,6 @@
+g_tenantId: "{{ lookup('env','TENANTID') }}"
+g_subscriptionId: "{{ lookup('env','SUBSCRIPTIONID') }}"
+g_aadClientId: "{{ lookup('env','AADCLIENTID') }}"
+g_aadClientSecret: "{{ lookup('env','AADCLIENTSECRET') }}"
+g_resourceGroup: "{{ lookup('env','RESOURCEGROUP') }}"
+g_location: "{{ lookup('env','LOCATION') }}"

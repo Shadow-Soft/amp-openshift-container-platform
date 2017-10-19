@@ -1,0 +1,11 @@
+---
+- hosts: master0
+  gather_facts: no
+  remote_user: "{{ lookup('env','SUDOUSER') }}"
+  become: yes
+  become_method: sudo
+  vars:
+    description: "Create Storage Class"
+  tasks:
+  - name: Create Storage Class with StorageAccountPV1
+    shell: "oc create -f /home/{{ lookup('env','SUDOUSER') }}}/scgeneric1.yml"

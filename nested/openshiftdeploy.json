@@ -172,8 +172,8 @@
 		"subscriptionId": "[subscription().subscriptionId]",
 		"location": "[resourceGroup().location]",
 		"resourceGroupName": "[resourceGroup().name]",
-		"openshiftDeploymentScriptUrl": "[concat(parameters('_artifactsLocation'), '/scripts/deployOpenShift.sh')]",
-		"openshiftDeploymentScriptFileName": "deployOpenShift.sh",
+		"mainScriptUrl": "[concat(parameters('_artifactsLocation'), '/scripts/', variables('mainScript'))]",
+		"mainScript": "deployOpenShift.sh",
 		"redHatTags": {
 			"app": "OpenShift",
 			"provider": "9d2c71fc-96ba-4b4a-93b3-14def5bc96fc"
@@ -196,11 +196,22 @@
 			"autoUpgradeMinorVersion": true,
 			"settings": {
 				"fileUris": [
-					"[variables('openshiftDeploymentScriptUrl')]"
+					"[variables('mainScriptUrl')]",
+					"[concat(parameters('_artifactsLocation'), '/scripts/setup-azure-master-single.yml')]",
+					"[concat(parameters('_artifactsLocation'), '/scripts/setup-azure-master-multi.yml')]",
+					"[concat(parameters('_artifactsLocation'), '/scripts/setup-azure-node-master.yml')]",
+					"[concat(parameters('_artifactsLocation'), '/scripts/setup-azure-node.yml')]",
+					"[concat(parameters('_artifactsLocation'), '/scripts/deletestucknodes.yml')]",
+					"[concat(parameters('_artifactsLocation'), '/scripts/configurestorageclass.yml')]",
+					"[concat(parameters('_artifactsLocation'), '/scripts/vars.yml')]",
+					"[concat(parameters('_artifactsLocation'), '/scripts/addocpuser.yml')]",
+					"[concat(parameters('_artifactsLocation'), '/scripts/assignclusteradminrights.yml')]",
+					"[concat(parameters('_artifactsLocation'), '/scripts/assignrootpassword.yml')]",
+					"[concat(parameters('_artifactsLocation'), '/scripts/dockerregistry.yml')]"
 				]
 			},
 			"protectedSettings": {
-				"commandToExecute": "[concat('bash ', variables('openshiftDeploymentScriptFileName'), ' \"', parameters('adminUsername'), '\" ', variables('singlequote'), parameters('openshiftPassword'), variables('singlequote'), ' \"', parameters('sshPrivateKey'), '\" \"', parameters('openshiftMasterHostname'), '\" \"', parameters('openshiftMasterPublicIpFqdn'), '\" \"', parameters('openshiftMasterPublicIpAddress'), '\" \"', parameters('openshiftInfraHostname'), '\" \"', parameters('openshiftNodeHostname'), '\" \"', parameters('nodeInstanceCount'), '\" \"', parameters('infraInstanceCount'), '\" \"', parameters('MasterInstanceCount'), '\" \"', parameters(parameters('subDomainChosen')), '\" \"', parameters('newStorageAccountRegistry'), '\" ', variables('singlequote'), parameters('newStorageAccountKey'), variables('singlequote'), ' ', variables('singlequote'), variables('tenantId'), variables('singlequote'), ' ', variables('singlequote'), variables('subscriptionId'), variables('singlequote'), ' ', variables('singlequote'), parameters('enableAzure'), variables('singlequote'), ' ', variables('singlequote'), parameters('aadClientId'), variables('singlequote'), ' ', variables('singlequote'), parameters('aadClientSecret'), variables('singlequote'), ' ', variables('singlequote'), variables('resourceGroupName'), variables('singlequote'), ' ', variables('singlequote'), variables('location'), variables('singlequote'), ' ', variables('singlequote'), parameters('newStorageAccountPersistentVolume1'), variables('singlequote'), ' ',  variables('singlequote'), parameters('newStorageAccountPV1Key'), variables('singlequote'))]"
+				"commandToExecute": "[concat('bash ', variables('mainScript'), ' \"', parameters('adminUsername'), '\" ', variables('singlequote'), parameters('openshiftPassword'), variables('singlequote'), ' \"', parameters('sshPrivateKey'), '\" \"', parameters('openshiftMasterHostname'), '\" \"', parameters('openshiftMasterPublicIpFqdn'), '\" \"', parameters('openshiftMasterPublicIpAddress'), '\" \"', parameters('openshiftInfraHostname'), '\" \"', parameters('openshiftNodeHostname'), '\" \"', parameters('nodeInstanceCount'), '\" \"', parameters('infraInstanceCount'), '\" \"', parameters('MasterInstanceCount'), '\" \"', parameters(parameters('subDomainChosen')), '\" \"', parameters('newStorageAccountRegistry'), '\" ', variables('singlequote'), parameters('newStorageAccountKey'), variables('singlequote'), ' ', variables('singlequote'), variables('tenantId'), variables('singlequote'), ' ', variables('singlequote'), variables('subscriptionId'), variables('singlequote'), ' ', variables('singlequote'), parameters('enableAzure'), variables('singlequote'), ' ', variables('singlequote'), parameters('aadClientId'), variables('singlequote'), ' ', variables('singlequote'), parameters('aadClientSecret'), variables('singlequote'), ' ', variables('singlequote'), variables('resourceGroupName'), variables('singlequote'), ' ', variables('singlequote'), variables('location'), variables('singlequote'), ' ', variables('singlequote'), parameters('newStorageAccountPersistentVolume1'), variables('singlequote'), ' ',  variables('singlequote'), parameters('newStorageAccountPV1Key'), variables('singlequote'))]"
 			}
 		}
 	}],

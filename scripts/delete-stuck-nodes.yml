@@ -1,0 +1,15 @@
+#!/usr/bin/ansible-playbook 
+- hosts: masters
+  gather_facts: no
+  become: yes
+  vars:
+    description: "Delete stuck nodes"
+  tasks:
+  - name: Delete stuck nodes so it can recreate itself
+    command: oc delete node {{inventory_hostname}}
+    delegate_to: "{{ lookup('env','BASTION') }}"
+  - name: sleep between deletes
+    pause:
+      seconds: 25
+  - name: set masters as unschedulable
+    command: oadm manage-node {{inventory_hostname}} --schedulable=false
