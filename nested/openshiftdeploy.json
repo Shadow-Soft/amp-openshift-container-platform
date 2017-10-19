@@ -201,7 +201,7 @@
 					"[concat(parameters('_artifactsLocation'), '/scripts/setup-azure-master-multi.yml')]",
 					"[concat(parameters('_artifactsLocation'), '/scripts/setup-azure-node-master.yml')]",
 					"[concat(parameters('_artifactsLocation'), '/scripts/setup-azure-node.yml')]",
-					"[concat(parameters('_artifactsLocation'), '/scripts/deletestucknodes.yml')]",
+					"[concat(parameters('_artifactsLocation'), '/scripts/delete-stuck-nodes.yml')]",
 					"[concat(parameters('_artifactsLocation'), '/scripts/configurestorageclass.yml')]",
 					"[concat(parameters('_artifactsLocation'), '/scripts/vars.yml')]",
 					"[concat(parameters('_artifactsLocation'), '/scripts/addocpuser.yml')]",
