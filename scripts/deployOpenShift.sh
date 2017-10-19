@@ -52,7 +52,6 @@ then
 else
 	cp ${currentDir}/setup-azure-master-multi.yml /home/${SUDOUSER}/setup-azure-master.yml
 fi
-cp ${currentDir}/setup-azure-master.yml /home/${SUDOUSER}/
 cp ${currentDir}/setup-azure-node-master.yml /home/${SUDOUSER}/
 cp ${currentDir}/setup-azure-node.yml /home/${SUDOUSER}/
 cp ${currentDir}/delete-stuck-nodes.yml /home/${SUDOUSER}/
