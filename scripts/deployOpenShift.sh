@@ -63,6 +63,7 @@ cp ${currentDir}/assignrootpassword.yml /home/${SUDOUSER}/
 cp ${currentDir}/dockerregistry.yml /home/${SUDOUSER}/
 chown -R ${SUDOUSER}. /home/${SUDOUSER}/*
 
+cd /home/${SUDOUSER}
 # Generate private keys for use by Ansible
 echo $(date) " - Generating Private keys for use by Ansible for OpenShift Installation"
 
