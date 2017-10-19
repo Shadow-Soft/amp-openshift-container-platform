@@ -37,7 +37,7 @@
 			"type": "string",
 			"defaultValue": "medium",
 			"allowedValues": [
-				"extrasmall", "small", "medium", "large"
+				"testdrive", "small", "medium", "large"
 			],
 			"minLength": 1,
 			"metadata": {
@@ -205,12 +205,12 @@
 		"nodeInstanceCount": "[variables('clusterSizeMap')[parameters('clusterSize')].nodeVmCount]",
 		"dataDiskSize": "[variables('clusterSizeMap')[parameters('clusterSize')].dataDiskSize]",
 		"clusterSizeMap": {
-			"extrasmall": {
-				"masterVmSize": "Standard_DS2_v2",
+			"testdrive": {
+				"masterVmSize": "Standard_D2s_v3",
 				"masterVmCount": 1,
-				"infraVmSize": "Standard_DS2_v2",
+				"infraVmSize": "Standard_E4s_v3",
 				"infraVmCount": 1,
-				"nodeVmSize": "Standard_DS2_v2",
+				"nodeVmSize": "Standard_D2s_v3",
 				"nodeVmCount": 1,
 				"dataDiskSize": 128
 			},
