@@ -68,8 +68,8 @@ echo $(date) " - Generating Private keys for use by Ansible for OpenShift Instal
 
 echo "Generating Private Keys"
 
-runuser -l $SUDOUSER -c "echo \"$PRIVATEKEY\" > ~/.ssh/id_rsa"
-runuser -l $SUDOUSER -c "chmod 600 ~/.ssh/id_rsa*"
+runuser $SUDOUSER -c "echo \"$PRIVATEKEY\" > ~/.ssh/id_rsa"
+runuser $SUDOUSER -c "chmod 600 ~/.ssh/id_rsa*"
 
 echo "Configuring SSH ControlPath to use shorter path name"
 
@@ -271,20 +271,20 @@ echo $(date) " - Running network_manager.yml playbook"
 DOMAIN=`domainname -d` 
 
 # Setup NetworkManager to manage eth0 
-runuser -l $SUDOUSER -c "ansible-playbook /usr/share/ansible/openshift-ansible/playbooks/byo/openshift-node/network_manager.yml" 
+runuser $SUDOUSER -c "ansible-playbook /usr/share/ansible/openshift-ansible/playbooks/byo/openshift-node/network_manager.yml" 
 
 # Configure resolv.conf on all hosts through NetworkManager 
 echo $(date) " - Setting up NetworkManager on eth0" 
 
-runuser -l $SUDOUSER -c "ansible all -b -m service -a \"name=NetworkManager state=restarted\"" 
+runuser $SUDOUSER -c "ansible all -b -m service -a \"name=NetworkManager state=restarted\"" 
 sleep 5 
-runuser -l $SUDOUSER -c "ansible all -b -m command -a \"nmcli con modify eth0 ipv4.dns-search $DOMAIN\"" 
-runuser -l $SUDOUSER -c "ansible all -b -m service -a \"name=NetworkManager state=restarted\"" 
+runuser $SUDOUSER -c "ansible all -b -m command -a \"nmcli con modify eth0 ipv4.dns-search $DOMAIN\"" 
+runuser $SUDOUSER -c "ansible all -b -m service -a \"name=NetworkManager state=restarted\"" 
 
 # Initiating installation of OpenShift Container Platform using Ansible Playbook
 echo $(date) " - Installing OpenShift Container Platform via Ansible Playbook"
 
-runuser -l $SUDOUSER -c "ansible-playbook /usr/share/ansible/openshift-ansible/playbooks/byo/config.yml"
+runuser $SUDOUSER -c "ansible-playbook /usr/share/ansible/openshift-ansible/playbooks/byo/config.yml"
 
 if [ $? -eq 0 ]
 then
@@ -313,7 +313,7 @@ sed -i -e "s/# Defaults    requiretty/Defaults    requiretty/" /etc/sudoers
 echo $(date) "- Installing OpenShift CLI tool (oc)"
 cd /root
 mkdir .kube
-runuser -l ${SUDOUSER} -c "scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ${SUDOUSER}@${MASTER}-0:~/.kube/config /tmp/kube-config"
+runuser ${SUDOUSER} -c "scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ${SUDOUSER}@${MASTER}-0:~/.kube/config /tmp/kube-config"
 cp /tmp/kube-config /root/.kube/config
 mkdir /home/${SUDOUSER}/.kube
 cp /tmp/kube-config /home/${SUDOUSER}/.kube/config
@@ -324,12 +324,12 @@ yum -y install atomic-openshift-clients
 # Adding user to OpenShift authentication file
 echo $(date) "- Adding OpenShift user"
 
-runuser -l $SUDOUSER -c "ansible-playbook ~/addocpuser.yml"
+runuser $SUDOUSER -c "ansible-playbook ~/addocpuser.yml"
 
 # Assigning cluster admin rights to OpenShift user
 echo $(date) "- Assigning cluster admin rights to user"
 
-runuser -l $SUDOUSER -c "ansible-playbook ~/assignclusteradminrights.yml"
+runuser $SUDOUSER -c "ansible-playbook ~/assignclusteradminrights.yml"
 
 if [[ $COCKPIT == "true" ]]
 then
@@ -337,20 +337,20 @@ then
 # Setting password for root if Cockpit is enabled
 echo $(date) "- Assigning password for root, which is used to login to Cockpit"
 
-runuser -l $SUDOUSER -c "ansible-playbook ~/assignrootpassword.yml"
+runuser $SUDOUSER -c "ansible-playbook ~/assignrootpassword.yml"
 fi
 
 # Configure Docker Registry to use Azure Storage Account
 echo $(date) "- Configuring Docker Registry to use Azure Storage Account"
 
-runuser -l $SUDOUSER -c "ansible-playbook ~/dockerregistry.yml"
+runuser $SUDOUSER -c "ansible-playbook ~/dockerregistry.yml"
 
 if [[ $AZURE == "true" ]]
 then
 	# Create Storage Classes
 	echo $(date) "- Creating Storage Classes"
 
-	runuser -l $SUDOUSER -c "ansible-playbook ~/configurestorageclass.yml"
+	runuser $SUDOUSER -c "ansible-playbook ~/configurestorageclass.yml"
 
 	echo $(date) "- Sleep for 120"
 
@@ -359,7 +359,7 @@ then
 	# Execute setup-azure-master and setup-azure-node playbooks to configure Azure Cloud Provider
 	echo $(date) "- Configuring OpenShift Cloud Provider to be Azure"
 
-	runuser -l $SUDOUSER -c "ansible-playbook ~/setup-azure-master.yml"
+	runuser $SUDOUSER -c "ansible-playbook ~/setup-azure-master.yml"
 
 	if [ $? -eq 0 ]
 	then
@@ -369,7 +369,7 @@ then
 	   exit 7
 	fi
 
-	runuser -l $SUDOUSER -c "ansible-playbook ~/setup-azure-node-master.yml"
+	runuser $SUDOUSER -c "ansible-playbook ~/setup-azure-node-master.yml"
 
 	if [ $? -eq 0 ]
 	then
@@ -379,7 +379,7 @@ then
 	   exit 8
 	fi
 
-	runuser -l $SUDOUSER -c "ansible-playbook ~/setup-azure-node.yml"
+	runuser $SUDOUSER -c "ansible-playbook ~/setup-azure-node.yml"
 
 	if [ $? -eq 0 ]
 	then
@@ -389,7 +389,7 @@ then
 	   exit 9
 	fi
 
-	runuser -l $SUDOUSER -c "ansible-playbook ~/delete-stuck-nodes.yml"
+	runuser $SUDOUSER -c "ansible-playbook ~/delete-stuck-nodes.yml"
 
 	if [ $? -eq 0 ]
 	then
