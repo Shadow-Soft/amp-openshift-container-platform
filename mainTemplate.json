@@ -171,7 +171,7 @@
 		"newStorageAccountPersistentVolume1": "[concat('pv1sa', uniqueString(concat(resourceGroup().id, 'persistentvolume1')))]",
 		"addressPrefix": "10.0.0.0/8",
 		"infraSubnet": "10.3.0.",
-		"infraSubnetPrefix": "[concat(variables('infraSubnet'),'0/16')",
+		"infraSubnetPrefix": "[concat(variables('infraSubnet'),'0/16')]",
 		"masterSubnetPrefix": "10.1.0.0/16",
 		"nodeSubnetPrefix": "10.2.0.0/16",
 		"virtualNetworkName": "openshiftvnet",
