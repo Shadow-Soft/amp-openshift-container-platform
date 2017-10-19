@@ -83,7 +83,7 @@ echo $(date) " - Create Ansible Playbooks for Post Installation tasks"
 
 if [[ $CLOUD == "US" ]]
 then
-	sed -i '${s/.$/ REGISTRY_STORAGE_AZURE_REALM=core.usgovcloudapi.net"/}' /home/${SUDOUSER}/dockerregistry.yml
+	sed -i '${s/.$/ -e REGISTRY_STORAGE_AZURE_REALM=core.usgovcloudapi.net"/}' /home/${SUDOUSER}/dockerregistry.yml
 fi
 
 # Run on MASTER-0 - Configure Storage Class
