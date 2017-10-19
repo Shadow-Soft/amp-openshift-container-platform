@@ -55,7 +55,7 @@ fi
 cp ${currentDir}/setup-azure-master.yml /home/${SUDOUSER}/
 cp ${currentDir}/setup-azure-node-master.yml /home/${SUDOUSER}/
 cp ${currentDir}/setup-azure-node.yml /home/${SUDOUSER}/
-cp ${currentDir}/deletestucknodes.yml /home/${SUDOUSER}/
+cp ${currentDir}/delete-stuck-nodes.yml /home/${SUDOUSER}/
 cp ${currentDir}/configurestorageclass.yml /home/${SUDOUSER}/
 cp ${currentDir}/vars.yml /home/${SUDOUSER}/
 cp ${currentDir}/addocpuser.yml /home/${SUDOUSER}/
@@ -390,7 +390,7 @@ then
 	   exit 9
 	fi
 
-	runuser -l $SUDOUSER -c "ansible-playbook ~/deletestucknodes.yml"
+	runuser -l $SUDOUSER -c "ansible-playbook ~/delete-stuck-nodes.yml"
 
 	if [ $? -eq 0 ]
 	then
