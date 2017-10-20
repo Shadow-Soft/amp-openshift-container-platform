@@ -129,6 +129,7 @@
 			"hardwareProfile": {
 				"vmSize": "[parameters('vmSize')]"
 			},
+			"mode": "Incremental",
 			"osProfile": {
 				"computerName": "[parameters('hostname')]",
 				"adminUsername": "[parameters('adminUsername')]",
@@ -157,20 +158,18 @@
 					"caching": "ReadWrite",
 					"createOption": "FromImage"
 				},
-				"dataDisks": [{
-					"name": "[concat(parameters('hostname'), '-datadisk-',copyIndex())]",
-					"copy": {
-						"name": "dataDiskLoop",
-						"count": "[parameters('storageCount')]",
-						"mode": "serial",
-						"batchSize": 1
-					},
-					"diskSizeGB": "[parameters('dataDiskSize')]",
-					"lun": 0,
-					"vhd": {
-						"uri": "[concat(concat(reference(resourceId(resourceGroup().name, 'Microsoft.Storage/storageAccounts', parameters('newStorageAccount')), parameters('apiVersionStorage')).primaryEndpoints['blob'], 'vhds/'), parameters('hostname'), '-datadisk-',copyIndex(),'.vhd')]"
-					},
-					"createOption": "Empty"
+				"copy": [{
+					"name": "dataDisks",
+					"count": "[parameters('storageCount')]",
+					"input": {
+						"name": "[concat(parameters('hostname'), '-datadisk-',copyIndex('dataDisks'))]",
+						"diskSizeGB": "[parameters('dataDiskSize')]",
+						"lun": "[copyIndex('dataDisks')]",
+						"vhd": {
+							"uri": "[concat(concat(reference(resourceId(resourceGroup().name, 'Microsoft.Storage/storageAccounts', parameters('newStorageAccount')), parameters('apiVersionStorage')).primaryEndpoints['blob'], 'vhds/'), parameters('hostname'), '-datadisk-',copyIndex('dataDisks'),'.vhd')]"
+						},
+						"createOption": "Empty"
+					}
 				}]
 			},
 			"networkProfile": {
