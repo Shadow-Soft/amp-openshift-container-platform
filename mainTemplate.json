@@ -1272,7 +1272,7 @@
 					]
 				},
 				"protectedSettings": {
-					"commandToExecute": "[concat('bash ', variables('bastionPrepScriptFileName'), ' ', parameters('rhsmUsername'), ' ',variables('singlequote'), parameters('rhsmPassword'), variables('singlequote'), ' ', parameters('osPoolId'), ' ', parameters('stPoolId'))]"
+					"commandToExecute": "[concat('bash ', variables('bastionPrepScriptFileName'), ' ', parameters('rhsmUsername'), ' ',variables('singlequote'), parameters('rhsmPassword'), variables('singlequote'), ' ', parameters('osPoolId'), ' ', parameters('stPoolId'), ' ', parameters('clusterSize'))]"
 				}
 			}
 		}, {

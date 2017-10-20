@@ -5,6 +5,7 @@ RHSMUSERNAME=$1
 RHSMPASSWORD="$2"
 OS_POOL_ID=$3
 STOR_POOL_ID=$4
+CLUSTERSIZE=$5
 
 # Remove RHUI
 
@@ -108,5 +109,10 @@ EOF
 echo $(date) " - Updating ansible.cfg file"
 
 ansible-playbook ./updateansiblecfg.yaml
+
+if [ $CLUSTERSIZE == "testdrive" ]
+then0
+	sed -i -e "s/glusterfs_nodes | count >= 3/glusterfs_nodes | count >= 1/" /usr/share/ansible/openshift-ansible/roles/openshift_storage_glusterfs/tasks/glusterfs_deploy.yml
+fi
 
 echo $(date) " - Script Complete"
