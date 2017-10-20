@@ -129,7 +129,6 @@
 			"hardwareProfile": {
 				"vmSize": "[parameters('vmSize')]"
 			},
-			"mode": "Incremental",
 			"osProfile": {
 				"computerName": "[parameters('hostname')]",
 				"adminUsername": "[parameters('adminUsername')]",
