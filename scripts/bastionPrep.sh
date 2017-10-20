@@ -111,7 +111,7 @@ echo $(date) " - Updating ansible.cfg file"
 ansible-playbook ./updateansiblecfg.yaml
 
 if [ $CLUSTERSIZE == "testdrive" ]
-then0
+then
 	sed -i -e "s/glusterfs_nodes | count >= 3/glusterfs_nodes | count >= 1/" /usr/share/ansible/openshift-ansible/roles/openshift_storage_glusterfs/tasks/glusterfs_deploy.yml
 fi
 
