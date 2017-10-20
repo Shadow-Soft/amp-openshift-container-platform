@@ -1086,6 +1086,9 @@
 					"location": {
 						"value": "[parameters('location')]"
 					},
+					"storageCount": {
+						"value": 1
+					}, 
 					"sshKeyPath": {
 						"value": "[variables('sshKeyPath')]"
 					},
@@ -1148,6 +1151,9 @@
 					"location": {
 						"value": "[parameters('location')]"
 					},
+					"storageCount": {
+						"value": 2
+					}, 
 					"sshKeyPath": {
 						"value": "[variables('sshKeyPath')]"
 					},
@@ -1210,6 +1216,9 @@
 					"location": {
 						"value": "[parameters('location')]"
 					},
+					"storageCount": {
+						"value": 1
+					}, 
 					"sshKeyPath": {
 						"value": "[variables('sshKeyPath')]"
 					},

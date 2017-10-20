@@ -43,6 +43,14 @@
 				"description": "VM Size"
 			}
 		},
+		"storageCount": {
+			"type": "int",
+			"minValue": 1,
+			"defaultValue": 1,
+			"metadata": {
+				"description": "Number of data disks"
+			}
+		},
 		"availabilitySet": {
 			"type": "string",
 			"minLength": 1,
@@ -150,11 +158,17 @@
 					"createOption": "FromImage"
 				},
 				"dataDisks": [{
-					"name": "[concat(parameters('hostname'), '-docker-pool')]",
+					"name": "[concat(parameters('hostname'), '-datadisk-',copyIndex())]",
+					"copy": {
+						"name": "dataDiskLoop",
+						"count": "[parameters('storageCount')]",
+						"mode": "serial",
+						"batchSize": 1
+					},
 					"diskSizeGB": "[parameters('dataDiskSize')]",
 					"lun": 0,
 					"vhd": {
-						"uri": "[concat(concat(reference(resourceId(resourceGroup().name, 'Microsoft.Storage/storageAccounts', parameters('newStorageAccount')), parameters('apiVersionStorage')).primaryEndpoints['blob'], 'vhds/'), parameters('hostname'), '-docker-pool.vhd')]"
+						"uri": "[concat(concat(reference(resourceId(resourceGroup().name, 'Microsoft.Storage/storageAccounts', parameters('newStorageAccount')), parameters('apiVersionStorage')).primaryEndpoints['blob'], 'vhds/'), parameters('hostname'), '-datadisk-',copyIndex(),'.vhd')]"
 					},
 					"createOption": "Empty"
 				}]
