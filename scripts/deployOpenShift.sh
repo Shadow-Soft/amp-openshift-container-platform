@@ -211,6 +211,7 @@ openshift_disable_check=memory_availability,docker_image_availability
 #Cloud Native Container Storage
 openshift_storage_glusterfs_namespace=glusterfs 
 openshift_storage_glusterfs_name=storage
+openshift_storage_glusterfs_use_default_selector=False
 
 # default selectors for router and registry services
 openshift_router_selector='type=${INFRATYPE}'
