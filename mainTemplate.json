@@ -228,7 +228,7 @@
 				"masterVmSize": "Standard_DS2_v2",
 				"masterVmCount": 1,
 				"infraVmSize": "Standard_DS2_v2",
-				"infraVmCount": 1,
+				"infraVmCount": 3,
 				"nodeVmSize": "Standard_DS2_v2",
 				"nodeVmCount": 2,
 				"dataDiskSize": 128
@@ -237,7 +237,7 @@
 				"masterVmSize": "Standard_DS3_v2",
 				"masterVmCount": 3,
 				"infraVmSize": "Standard_DS3_v2",
-				"infraVmCount": 2,
+				"infraVmCount": 3,
 				"nodeVmSize": "Standard_DS3_v2",
 				"nodeVmCount": 4,
 				"dataDiskSize": 256
@@ -246,7 +246,7 @@
 				"masterVmSize": "Standard_DS3_v2",
 				"masterVmCount": 3,
 				"infraVmSize": "Standard_DS3_v2",
-				"infraVmCount": 2,
+				"infraVmCount": 3,
 				"nodeVmSize": "Standard_DS4_v2",
 				"nodeVmCount": 6,
 				"dataDiskSize": 512
