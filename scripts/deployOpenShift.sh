@@ -94,10 +94,10 @@ echo $(date) " - Create Ansible Hosts file"
 # Build glusterfs node list
 glusterInfo="${INFRA}-0 glusterfs_ip=${INFRASUBNET}4 glusterfs_devices='[ \"/dev/sdd\" ]'"
 for (( c=1; c<$INFRACOUNT; c++ ))
-	do
-	  glusterInfo="$glusterInfo
-	  "${INFRA}-$((c+4)) glusterfs_ip=${INFRASUBNET}$((c+4)) glusterfs_devices='[ \"/dev/sdd\" ]'""
-	done
+do
+glusterInfo="$glusterInfo
+${INFRA}-${c} glusterfs_ip=${INFRASUBNET}$((c+4)) glusterfs_devices='[ \"/dev/sdd\" ]'"
+done
 
 if [ $MASTERCOUNT -eq 1 ]
 then

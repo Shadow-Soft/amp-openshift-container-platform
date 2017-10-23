@@ -12,8 +12,8 @@ then
 	az login
 fi
 
-$RESGROUP=$1
+RESGROUP=$1
 
 az group create -l eastus -n $RESGROUP
 
-az group deployment create --name ocpdeployment --template-urihttps://raw.githubusercontent.com/Shadow-Soft/amp-openshift-container-platform/master/mainTemplate.json--parameters @mainTemplate.parameters.json --resource-group $RESGROUP --no-wait
+az group deployment create --name ocpdeployment --template-uri https://raw.githubusercontent.com/Shadow-Soft/amp-openshift-container-platform/master/mainTemplate.json --parameters @mainTemplate.parameters.json --resource-group $RESGROUP --no-wait
