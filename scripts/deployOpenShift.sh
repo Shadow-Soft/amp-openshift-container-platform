@@ -133,7 +133,7 @@ openshift_disable_check=memory_availability,docker_image_availability
 openshift_storage_glusterfs_namespace=glusterfs 
 openshift_storage_glusterfs_name=storage
 openshift_storage_glusterfs_use_default_selector=False
-openshift_storage_glusterfs_nodeselector='glusterfs=storage-host'
+openshift_storage_glusterfs_nodeselector={"type":"${INFRATYPE}"}
 openshift_storage_glusterfs_is_native=True
 
 # default selectors for router and registry services
@@ -214,7 +214,7 @@ openshift_disable_check=memory_availability,docker_image_availability
 openshift_storage_glusterfs_namespace=glusterfs 
 openshift_storage_glusterfs_name=storage
 openshift_storage_glusterfs_use_default_selector=False
-openshift_storage_glusterfs_registry_nodeselector='glusterfs=storage-host'
+openshift_storage_glusterfs_nodeselector={"type":"${INFRATYPE}"}
 openshift_storage_glusterfs_is_native=True
 
 # default selectors for router and registry services
@@ -312,7 +312,7 @@ runuser $SUDOUSER -c "ansible all -b -m service -a \"name=NetworkManager state=r
 # Initiating installation of OpenShift Container Platform using Ansible Playbook
 echo $(date) " - Installing OpenShift Container Platform via Ansible Playbook"
 
-runuser $SUDOUSER -c "ansible-playbook /usr/share/ansible/openshift-ansible/playbooks/byo/config.yml"
+runuser $SUDOUSER -c "ansible-playbook /usr/share/ansible/openshift-ansible/playbooks/byo/config.yml -vvvvv"
 
 if [ $? -eq 0 ]
 then
