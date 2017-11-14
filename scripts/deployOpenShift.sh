@@ -75,9 +75,6 @@ sed -i -e "s/^# control_path = %(directory)s\/%%h-%%r/control_path = %(directory
 sed -i -e "s/^#host_key_checking = False/host_key_checking = False/" /etc/ansible/ansible.cfg
 sed -i -e "s/^#pty=False/pty=False/" /etc/ansible/ansible.cfg
 
-# Create Ansible Playbooks for Post Installation tasks
-echo $(date) " - Create Ansible Playbooks for Post Installation tasks"
-
 # Run on MASTER-0 node - configure registry to use Azure Storage
 # Create docker registry config based on Commercial Azure or Azure Government
 
@@ -85,8 +82,6 @@ if [[ $CLOUD == "US" ]]
 then
 	sed -i '${s/.$/ -e REGISTRY_STORAGE_AZURE_REALM=core.usgovcloudapi.net"/}' /home/${SUDOUSER}/dockerregistry.yml
 fi
-
-# Run on MASTER-0 - Configure Storage Class
 
 # Create Ansible Hosts File
 echo $(date) " - Create Ansible Hosts file"
@@ -99,18 +94,8 @@ glusterInfo="$glusterInfo
 ${INFRA}-${c} glusterfs_ip=${INFRASUBNET}$((c+4)) glusterfs_devices='[ \"/dev/sdd\" ]'"
 done
 
-if [ $MASTERCOUNT -eq 1 ]
-then
-
-	cat > /etc/ansible/hosts <<EOF
-# Create an OSEv3 group that contains the masters and nodes groups
-[OSEv3:children]
-masters
-nodes
-master0
-glusterfs
-new_nodes
-
+# Creating the first half of the hosts file
+cat > /etc/ansible/hosts <<EOF
 # Set variables common for all OSEv3 hosts
 [OSEv3:vars]
 ansible_ssh_user=$SUDOUSER
@@ -134,89 +119,7 @@ openshift_disable_check=memory_availability,docker_image_availability
 openshift_storage_glusterfs_namespace=glusterfs 
 openshift_storage_glusterfs_name=storage
 openshift_storage_glusterfs_use_default_selector=False
-openshift_storage_glusterfs_nodeselector={"type":"${INFRATYPE}"}
-openshift_storage_glusterfs_is_native=True
-
-# default selectors for router and registry services
-openshift_router_selector='type=${INFRATYPE}'
-openshift_registry_selector='type=${INFRATYPE}'
-
-openshift_master_cluster_hostname=$MASTERPUBLICIPHOSTNAME
-openshift_master_cluster_public_hostname=$MASTERPUBLICIPHOSTNAME
-openshift_master_cluster_public_vip=$MASTERPUBLICIPADDRESS
-
-# Enable HTPasswdPasswordIdentityProvider
-openshift_master_identity_providers=[{'name': 'htpasswd_auth', 'login': 'true', 'challenge': 'true', 'kind': 'HTPasswdPasswordIdentityProvider', 'filename': '/etc/origin/master/htpasswd'}]
-
-# Setup metrics
-openshift_hosted_metrics_deploy=false
-openshift_metrics_cassandra_storage_type=dynamic
-openshift_metrics_start_cluster=true
-openshift_metrics_hawkular_nodeselector={"type":"${INFRATYPE}"}
-openshift_metrics_cassandra_nodeselector={"type":"${INFRATYPE}"}
-openshift_metrics_heapster_nodeselector={"type":"${INFRATYPE}"}
-openshift_hosted_metrics_public_url=https://metrics.$ROUTING/hawkular/metrics
-
-# Setup logging
-openshift_hosted_logging_deploy=false
-openshift_hosted_logging_storage_kind=dynamic
-openshift_logging_fluentd_nodeselector={"logging":"true"}
-openshift_logging_es_nodeselector={"type":"${INFRATYPE}"}
-openshift_logging_kibana_nodeselector={"type":"${INFRATYPE}"}
-openshift_logging_curator_nodeselector={"type":"${INFRATYPE}"}
-openshift_master_logging_public_url=https://kibana.$ROUTING
-
-# host group for masters
-[masters]
-$MASTER-0
-
-[master0]
-$MASTER-0
-
-[glusterfs]
-$glusterInfo
-
-# host group for nodes
-[nodes]
-$MASTER-0 openshift_node_labels="{'type': 'master', 'zone': 'default'}" openshift_hostname=$MASTER-0
-EOF
-
-else
-
-	cat > /etc/ansible/hosts <<EOF
-# Create an OSEv3 group that contains the masters and nodes groups
-[OSEv3:children]
-masters
-nodes
-etcd
-master0
-glusterfs
-new_nodes
-
-# Set variables common for all OSEv3 hosts
-[OSEv3:vars]
-ansible_ssh_user=$SUDOUSER
-ansible_become=yes
-openshift_install_examples=true
-deployment_type=openshift-enterprise
-openshift_release=v3.6
-docker_udev_workaround=True
-openshift_use_dnsmasq=True
-openshift_master_default_subdomain=$ROUTING
-openshift_override_hostname_check=true
-#osm_use_cockpit=false
-os_sdn_network_plugin_name='redhat/openshift-ovs-multitenant'
-openshift_master_console_port=443
-openshift_master_api_port=443
-openshift_cloudprovider_kind=azure
-osm_default_node_selector='type=app'
-openshift_disable_check=memory_availability,docker_image_availability
-
-#Cloud Native Container Storage
-openshift_storage_glusterfs_namespace=glusterfs 
-openshift_storage_glusterfs_name=storage
-openshift_storage_glusterfs_use_default_selector=False
-openshift_storage_glusterfs_nodeselector={"type":"${INFRATYPE}"}
+openshift_storage_glusterfs_nodeselector='type=${INFRATYPE}'
 openshift_storage_glusterfs_is_native=True
 
 # default selectors for router and registry services
@@ -249,6 +152,50 @@ openshift_logging_kibana_nodeselector={"type":"${INFRATYPE}"}
 openshift_logging_curator_nodeselector={"type":"${INFRATYPE}"}
 openshift_master_logging_public_url=https://kibana.$ROUTING
 
+EOF
+
+# Creating the 2nd half of the hosts file
+if [ $MASTERCOUNT -eq 1 ]
+then
+echo $(date) " - Configuring host file based on single master"
+
+cat >> /etc/ansible/hosts <<EOF
+# Create an OSEv3 group that contains the masters and nodes groups
+[OSEv3:children]
+masters
+nodes
+master0
+glusterfs
+new_nodes
+
+# host group for masters
+[masters]
+$MASTER-0
+
+[master0]
+$MASTER-0
+
+[glusterfs]
+$glusterInfo
+
+# host group for nodes
+[nodes]
+$MASTER-0 openshift_node_labels="{'type': 'master', 'zone': 'default'}" openshift_hostname=$MASTER-0
+EOF
+
+else
+echo $(date) " - Configuring host file based on multi-master"
+
+cat > /etc/ansible/hosts <<EOF
+# Create an OSEv3 group that contains the masters and nodes groups
+[OSEv3:children]
+masters
+nodes
+etcd
+master0
+glusterfs
+new_nodes
+
 # host group for masters
 [masters]
 $MASTER-[0:${MASTERLOOP}]
@@ -274,6 +221,7 @@ EOF
 	  echo "$MASTER-$c openshift_node_labels=\"{'type': 'master', 'zone': 'default'}\" openshift_hostname=$MASTER-$c" >> /etc/ansible/hosts
 	done
 fi
+
 
 # Loop to add Infra Nodes to /etc/ansible/hosts
 
