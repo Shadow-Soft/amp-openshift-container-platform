@@ -116,11 +116,12 @@ osm_default_node_selector='type=app'
 openshift_disable_check=memory_availability,docker_image_availability
 
 #Cloud Native Container Storage
-openshift_storage_glusterfs_namespace=glusterfs 
-openshift_storage_glusterfs_name=storage
-openshift_storage_glusterfs_use_default_selector=False
-openshift_storage_glusterfs_nodeselector='type=${INFRATYPE}'
-openshift_storage_glusterfs_is_native=True
+openshift_hosted_registry_storage_kind=glusterfs
+#openshift_storage_glusterfs_namespace=glusterfs 
+#openshift_storage_glusterfs_name=storage
+#openshift_storage_glusterfs_use_default_selector=False
+#openshift_storage_glusterfs_nodeselector='type=${INFRATYPE}'
+#openshift_storage_glusterfs_is_native=True
 
 # default selectors for router and registry services
 openshift_router_selector='type=${INFRATYPE}'
@@ -129,7 +130,6 @@ openshift_registry_selector='type=${INFRATYPE}'
 openshift_master_cluster_method=native
 openshift_master_cluster_hostname=$MASTERPUBLICIPHOSTNAME
 openshift_master_cluster_public_hostname=$MASTERPUBLICIPHOSTNAME
-openshift_master_cluster_public_vip=$MASTERPUBLICIPADDRESS
 
 # Enable HTPasswdPasswordIdentityProvider
 openshift_master_identity_providers=[{'name': 'htpasswd_auth', 'login': 'true', 'challenge': 'true', 'kind': 'HTPasswdPasswordIdentityProvider', 'filename': '/etc/origin/master/htpasswd'}]
@@ -141,7 +141,7 @@ openshift_metrics_start_cluster=true
 openshift_metrics_hawkular_nodeselector={"type":"${INFRATYPE}"}
 openshift_metrics_cassandra_nodeselector={"type":"${INFRATYPE}"}
 openshift_metrics_heapster_nodeselector={"type":"${INFRATYPE}"}
-openshift_hosted_metrics_public_url=https://metrics.$ROUTING/hawkular/metrics
+openshift_hosted_metrics_public_url=https://metrics.${ROUTING}/hawkular/metrics
 
 # Setup logging
 openshift_hosted_logging_deploy=false
@@ -150,7 +150,7 @@ openshift_logging_fluentd_nodeselector={"logging":"true"}
 openshift_logging_es_nodeselector={"type":"${INFRATYPE}"}
 openshift_logging_kibana_nodeselector={"type":"${INFRATYPE}"}
 openshift_logging_curator_nodeselector={"type":"${INFRATYPE}"}
-openshift_master_logging_public_url=https://kibana.$ROUTING
+openshift_master_logging_public_url=https://kibana.${ROUTING}
 
 EOF
 
@@ -166,6 +166,7 @@ masters
 nodes
 master0
 glusterfs
+glusterfs_registry
 new_nodes
 
 # host group for masters
@@ -176,6 +177,9 @@ $MASTER-0
 $MASTER-0
 
 [glusterfs]
+$glusterInfo
+
+[glusterfs_registry]
 $glusterInfo
 
 # host group for nodes
@@ -194,6 +198,7 @@ nodes
 etcd
 master0
 glusterfs
+glusterfs_registry
 new_nodes
 
 # host group for masters
@@ -208,6 +213,9 @@ $MASTER-[0:${MASTERLOOP}]
 $MASTER-0
 
 [glusterfs]
+$glusterInfo
+
+[glusterfs_registry]
 $glusterInfo
 
 # host group for nodes

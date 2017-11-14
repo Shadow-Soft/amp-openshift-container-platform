@@ -192,6 +192,7 @@
 		"masterLbBackendPoolId": "[concat(variables('masterLbId'),'/backendAddressPools/loadBalancerBackend')]",
 		"masterLbHttpProbeId": "[concat(variables('masterLbId'),'/probes/httpProbe')]",
 		"masterLb8443ProbeId": "[concat(variables('masterLbId'),'/probes/8443Probe')]",
+		"masterLb443ProbeId": "[concat(variables('masterLbId'),'/probes/443Probe')]",
 		"masterLbCockpitProbeId": "[concat(variables('masterLbId'),'/probes/cockpitProbe')]",
 
 		"infraLoadBalancerName": "[concat(variables('openshiftInfraHostname'), 'lb')]",
@@ -710,6 +711,24 @@
 						}
 					}
 				}, {
+					"name": "HTTPS",
+					"properties": {
+						"frontendIPConfiguration": {
+							"id": "[variables('masterLbFrontEndConfigId')]"
+						},
+						"backendAddressPool": {
+							"id": "[variables('masterLbBackendPoolId')]"
+						},
+						"protocol": "Tcp",
+						"loadDistribution": "SourceIP",
+						"idleTimeoutInMinutes": 30,
+						"frontendPort": 443,
+						"backendPort": 443,
+						"probe": {
+							"id": "[variables('masterLb443ProbeId')]"
+						}
+					}
+				}, {
 					"name": "CockpitConsole",
 					"properties": {
 						"frontendIPConfiguration": {
@@ -741,6 +760,14 @@
 					"properties": {
 						"protocol": "Tcp",
 						"port": 9090,
+						"intervalInSeconds": 5,
+						"numberOfProbes": 2
+					}
+				}, {
+					"name": "443Probe",
+					"properties": {
+						"protocol": "Tcp",
+						"port": 443,
 						"intervalInSeconds": 5,
 						"numberOfProbes": 2
 					}
