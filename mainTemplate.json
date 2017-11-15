@@ -173,7 +173,7 @@
 		"infraSubnet": "10.3.0.",
 		"infraSubnetPrefix": "[concat(variables('infraSubnet'),'0/16')]",
 		"masterSubnetPrefix": "10.1.0.0/16",
-		"nodeSubnet": "10.2.0.6",
+		"nodeSubnet": "10.2.0.",
 		"nodeSubnetPrefix": "[concat(variables('nodeSubnet'),'0/16')]",
 		"virtualNetworkName": "openshiftvnet",
 		"infraSubnetName": "infrasubnet",
