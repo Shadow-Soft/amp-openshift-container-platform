@@ -27,7 +27,7 @@ export RESOURCEGROUP=${20}
 export LOCATION=${21}
 STORAGEACCOUNT1=${22}
 SAKEY1=${23}
-INFRASUBNET=${24}
+NODESUBNET=${24}
 
 export BASTION=$(hostname)
 
@@ -87,11 +87,11 @@ fi
 echo $(date) " - Create Ansible Hosts file"
 
 # Build glusterfs node list
-glusterInfo="${INFRA}-0 glusterfs_ip=${INFRASUBNET}4 glusterfs_devices='[ \"/dev/sdd\" ]'"
-for (( c=1; c<$INFRACOUNT; c++ ))
+glusterInfo="${NODE}-0 glusterfs_ip=${NODESUBNET}4 glusterfs_devices='[ \"/dev/sdd\" ]'"
+for (( c=1; c<$NODECOUNT; c++ ))
 do
 glusterInfo="$glusterInfo
-${INFRA}-${c} glusterfs_ip=${INFRASUBNET}$((c+4)) glusterfs_devices='[ \"/dev/sdd\" ]'"
+${NODE}-${c} glusterfs_ip=${NODESUBNET}$((c+4)) glusterfs_devices='[ \"/dev/sdd\" ]'"
 done
 
 # Creating the first half of the hosts file
@@ -117,9 +117,9 @@ openshift_disable_check=memory_availability,docker_image_availability
 
 #Cloud Native Container Storage
 openshift_hosted_registry_storage_kind=glusterfs
+openshift_storage_glusterfs_use_default_selector=False
 #openshift_storage_glusterfs_namespace=glusterfs 
 #openshift_storage_glusterfs_name=storage
-#openshift_storage_glusterfs_use_default_selector=False
 #openshift_storage_glusterfs_nodeselector='type=${INFRATYPE}'
 #openshift_storage_glusterfs_is_native=True
 

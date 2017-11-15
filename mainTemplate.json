@@ -173,7 +173,8 @@
 		"infraSubnet": "10.3.0.",
 		"infraSubnetPrefix": "[concat(variables('infraSubnet'),'0/16')]",
 		"masterSubnetPrefix": "10.1.0.0/16",
-		"nodeSubnetPrefix": "10.2.0.0/16",
+		"nodeSubnet": "10.2.0.6",
+		"nodeSubnetPrefix": "[concat(variables('nodeSubnet'),'0/16')]",
 		"virtualNetworkName": "openshiftvnet",
 		"infraSubnetName": "infrasubnet",
 		"masterSubnetName": "mastersubnet",
@@ -1028,7 +1029,8 @@
 				"ipConfigurations": [{
 					"name": "[concat(variables('openshiftNodeHostname'), copyIndex(), 'ipconfig')]",
 					"properties": {
-						"privateIPAllocationMethod": "Dynamic",
+						"privateIPAllocationMethod": "Static",
+						"privateIPAddress": "[concat(variables('nodeSubnet'),copyIndex(4))]",
 						"subnet": {
 							"id": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourceGroup().name, '/providers/Microsoft.Network/virtualNetworks/', variables('virtualNetworkName'), '/subnets/', variables('nodeSubnetName'))]"
 						}
@@ -1179,7 +1181,7 @@
 						"value": "[parameters('location')]"
 					},
 					"storageCount": {
-						"value": 2
+						"value": 1
 					}, 
 					"sshKeyPath": {
 						"value": "[variables('sshKeyPath')]"
@@ -1244,7 +1246,7 @@
 						"value": "[parameters('location')]"
 					},
 					"storageCount": {
-						"value": 1
+						"value": 2
 					}, 
 					"sshKeyPath": {
 						"value": "[variables('sshKeyPath')]"
@@ -1463,8 +1465,8 @@
 					"infraInstanceCount": {
 						"value": "[variables('infraInstanceCount')]"
 					},
-					"infraSubnet": {
-						"value": "[variables('infraSubnet')]"
+					"nodeSubnet": {
+						"value": "[variables('nodeSubnet')]"
 					},
 					"nodeInstanceCount": {
 						"value": "[variables('nodeInstanceCount')]"

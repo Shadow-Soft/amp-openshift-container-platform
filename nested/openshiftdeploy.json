@@ -98,11 +98,11 @@
 				"description": "Number of OpenShift Infra nodes"
 			}
 		},
-		"infraSubnet": {
+		"nodeSubnet": {
 			"type": "String",
 			"minLength": 5,
 			"metadata": {
-				"description": "The first 3 digits of the infraSubnet ending in '.' (ex. 1.0.1.)"
+				"description": "The first 3 digits of the nodeSubnet ending in '.' (ex. 1.0.1.)"
 			}
 		},
 		"nodeInstanceCount": {
@@ -218,7 +218,7 @@
 				]
 			},
 			"protectedSettings": {
-				"commandToExecute": "[concat('bash ', variables('mainScript'), ' \"', parameters('adminUsername'), '\" ', variables('singlequote'), parameters('openshiftPassword'), variables('singlequote'), ' \"', parameters('sshPrivateKey'), '\" \"', parameters('openshiftMasterHostname'), '\" \"', parameters('openshiftMasterPublicIpFqdn'), '\" \"', parameters('openshiftMasterPublicIpAddress'), '\" \"', parameters('openshiftInfraHostname'), '\" \"', parameters('openshiftNodeHostname'), '\" \"', parameters('nodeInstanceCount'), '\" \"', parameters('infraInstanceCount'), '\" \"', parameters('MasterInstanceCount'), '\" \"', parameters(parameters('subDomainChosen')), '\" \"', parameters('newStorageAccountRegistry'), '\" ', variables('singlequote'), parameters('newStorageAccountKey'), variables('singlequote'), ' ', variables('singlequote'), variables('tenantId'), variables('singlequote'), ' ', variables('singlequote'), variables('subscriptionId'), variables('singlequote'), ' ', variables('singlequote'), parameters('enableAzure'), variables('singlequote'), ' ', variables('singlequote'), parameters('aadClientId'), variables('singlequote'), ' ', variables('singlequote'), parameters('aadClientSecret'), variables('singlequote'), ' ', variables('singlequote'), variables('resourceGroupName'), variables('singlequote'), ' ', variables('singlequote'), variables('location'), variables('singlequote'), ' ', variables('singlequote'), parameters('newStorageAccountPersistentVolume1'), variables('singlequote'), ' ',  variables('singlequote'), parameters('newStorageAccountPV1Key'), variables('singlequote'), ' ', parameters('infraSubnet'))]"
+				"commandToExecute": "[concat('bash ', variables('mainScript'), ' \"', parameters('adminUsername'), '\" ', variables('singlequote'), parameters('openshiftPassword'), variables('singlequote'), ' \"', parameters('sshPrivateKey'), '\" \"', parameters('openshiftMasterHostname'), '\" \"', parameters('openshiftMasterPublicIpFqdn'), '\" \"', parameters('openshiftMasterPublicIpAddress'), '\" \"', parameters('openshiftInfraHostname'), '\" \"', parameters('openshiftNodeHostname'), '\" \"', parameters('nodeInstanceCount'), '\" \"', parameters('infraInstanceCount'), '\" \"', parameters('MasterInstanceCount'), '\" \"', parameters(parameters('subDomainChosen')), '\" \"', parameters('newStorageAccountRegistry'), '\" ', variables('singlequote'), parameters('newStorageAccountKey'), variables('singlequote'), ' ', variables('singlequote'), variables('tenantId'), variables('singlequote'), ' ', variables('singlequote'), variables('subscriptionId'), variables('singlequote'), ' ', variables('singlequote'), parameters('enableAzure'), variables('singlequote'), ' ', variables('singlequote'), parameters('aadClientId'), variables('singlequote'), ' ', variables('singlequote'), parameters('aadClientSecret'), variables('singlequote'), ' ', variables('singlequote'), variables('resourceGroupName'), variables('singlequote'), ' ', variables('singlequote'), variables('location'), variables('singlequote'), ' ', variables('singlequote'), parameters('newStorageAccountPersistentVolume1'), variables('singlequote'), ' ',  variables('singlequote'), parameters('newStorageAccountPV1Key'), variables('singlequote'), ' ', parameters('nodeSubnet'))]"
 			}
 		}
 	}],
