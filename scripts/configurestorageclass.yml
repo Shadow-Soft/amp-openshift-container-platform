@@ -8,4 +8,4 @@
     description: "Create Storage Class"
   tasks:
   - name: Create Storage Class with StorageAccountPV1
-    shell: "oc create -f /home/{{ lookup('env','SUDOUSER') }}}/scgeneric1.yml"
+    shell: "oc create -f /home/{{ lookup('env','SUDOUSER') }}/scgeneric1.yml"
