@@ -220,8 +220,8 @@
 			"testdrive": {
 				"masterVmSize": "Standard_D2s_v3",
 				"masterVmCount": 2,
-				"infraVmSize": "Standard_E4s_v3",
-				"infraVmCount": 3,
+				"infraVmSize": "Standard_D2s_v3",
+				"infraVmCount": 2,
 				"nodeVmSize": "Standard_D2s_v3",
 				"nodeVmCount": 3,
 				"dataDiskSize": 256
@@ -233,7 +233,7 @@
 				"infraVmCount": 2,
 				"nodeVmSize": "Standard_DS2_v2",
 				"nodeVmCount": 3,
-				"dataDiskSize": 128
+				"dataDiskSize": 256
 			},
 			"medium": {
 				"masterVmSize": "Standard_DS3_v2",
