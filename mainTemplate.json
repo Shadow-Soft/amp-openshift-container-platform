@@ -219,20 +219,20 @@
 		"clusterSizeMap": {
 			"testdrive": {
 				"masterVmSize": "Standard_D2s_v3",
-				"masterVmCount": 1,
+				"masterVmCount": 2,
 				"infraVmSize": "Standard_E4s_v3",
-				"infraVmCount": 1,
+				"infraVmCount": 3,
 				"nodeVmSize": "Standard_D2s_v3",
-				"nodeVmCount": 1,
+				"nodeVmCount": 3,
 				"dataDiskSize": 256
 			},
 			"small": {
 				"masterVmSize": "Standard_DS2_v2",
 				"masterVmCount": 1,
 				"infraVmSize": "Standard_DS2_v2",
-				"infraVmCount": 3,
+				"infraVmCount": 2,
 				"nodeVmSize": "Standard_DS2_v2",
-				"nodeVmCount": 2,
+				"nodeVmCount": 3,
 				"dataDiskSize": 128
 			},
 			"medium": {
