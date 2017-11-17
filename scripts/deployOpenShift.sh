@@ -88,6 +88,8 @@ echo $(date) " - Create Ansible Hosts file"
 
 # Build glusterfs node list
 # Grab drive name from host
+runuser $SUDOUSER -c "ansible ${NODE}-0 -m shell -a \"fdisk -l\""
+
 drive=$(runuser $SUDOUSER -c "ansible ${NODE}-0 -m shell -a \"fdisk -l\"" | awk '$1 == "Disk" && $2 ~ /^\// && ! /mapper/ {if (drive) print drive; drive = $2; sub(":", "", drive);} drive && /^\// {drive = ""} END {if (drive) print drive;}')
 
 # Fill in the first line of glusterinfo
