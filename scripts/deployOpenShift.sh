@@ -87,11 +87,18 @@ fi
 echo $(date) " - Create Ansible Hosts file"
 
 # Build glusterfs node list
-glusterInfo="${NODE}-0 glusterfs_ip=${NODESUBNET}4 glusterfs_devices='[ \"/dev/sdd\" ]'"
+# Grab drive name from host
+drive=$(ansible ${NODE}-0 -m shell -a "fdisk -l" | awk '$1 == "Disk" && $2 ~ /^\// && ! /mapper/ {if (drive) print drive; drive = $2; sub(":", "", drive);} drive && /^\// {drive = ""} END {if (drive) print drive;}')
+
+# Fill in the first line of glusterinfo
+glusterInfo="${NODE}-0 glusterfs_ip=${NODESUBNET}4 glusterfs_devices='[ \"${drive}\" ]'"
+
+# Loop to fill in the rest of the lines in the same way
 for (( c=1; c<$NODECOUNT; c++ ))
 do
+drive=$(ansible ${NODE}-$c -m shell -a "fdisk -l" | awk '$1 == "Disk" && $2 ~ /^\// && ! /mapper/ {if (drive) print drive; drive = $2; sub(":", "", drive);} drive && /^\// {drive = ""} END {if (drive) print drive;}')
 glusterInfo="$glusterInfo
-${NODE}-${c} glusterfs_ip=${NODESUBNET}$((c+4)) glusterfs_devices='[ \"/dev/sdd\" ]'"
+${NODE}-${c} glusterfs_ip=${NODESUBNET}$((c+4)) glusterfs_devices='[ \"${drive}\" ]'"
 done
 
 # Creating the first half of the hosts file
