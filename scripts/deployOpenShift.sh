@@ -88,10 +88,8 @@ echo $(date) " - Create Ansible Hosts file"
 
 # Build glusterfs node list
 # Grab drive name from host
-test=$(runuser $SUDOUSER -c "ssh mycluster-node-0 'sudo /usr/sbin/fdisk -l'")
-echo $test > /tmp/test
 
-drive=$(runuser $SUDOUSER -c "ssh mycluster-node-0 'sudo /usr/sbin/fdisk -l'" | awk '$1 == "Disk" && $2 ~ /^\// && ! /mapper/ {if (drive) print drive; drive = $2; sub(":", "", drive);} drive && /^\// {drive = ""} END {if (drive) print drive;}')
+drive=$(runuser $SUDOUSER -c "ssh ${NODESUBNET}4 'sudo /usr/sbin/fdisk -l'" | awk '$1 == "Disk" && $2 ~ /^\// && ! /mapper/ {if (drive) print drive; drive = $2; sub(":", "", drive);} drive && /^\// {drive = ""} END {if (drive) print drive;}')
 
 # Fill in the first line of glusterinfo
 glusterInfo="${NODE}-0 glusterfs_ip=${NODESUBNET}4 glusterfs_devices='[ \"${drive}\" ]'"
