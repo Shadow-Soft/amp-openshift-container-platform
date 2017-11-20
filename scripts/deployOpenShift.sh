@@ -99,7 +99,7 @@ glusterInfo="${NODE}-0 glusterfs_ip=${NODESUBNET}4 glusterfs_devices='[ \"${driv
 for (( c=1; c<$NODECOUNT; c++ ))
 do
 runuser $SUDOUSER -c "ssh-keyscan -H ${NODESUBNET}$((c+4)) >> ~/.ssh/known_hosts"
-drive=$(runuser $SUDOUSER -c "ansible ${NODE}-$c -m shell -a \"fdisk -l\"" | awk '$1 == "Disk" && $2 ~ /^\// && ! /mapper/ {if (drive) print drive; drive = $2; sub(":", "", drive);} drive && /^\// {drive = ""} END {if (drive) print drive;}')
+drive=$(runuser $SUDOUSER -c "ssh ${NODESUBNET}$((c+4)) 'sudo /usr/sbin/fdisk -l'" | awk '$1 == "Disk" && $2 ~ /^\// && ! /mapper/ {if (drive) print drive; drive = $2; sub(":", "", drive);} drive && /^\// {drive = ""} END {if (drive) print drive;}')
 glusterInfo="$glusterInfo
 ${NODE}-${c} glusterfs_ip=${NODESUBNET}$((c+4)) glusterfs_devices='[ \"${drive}\" ]'"
 done
