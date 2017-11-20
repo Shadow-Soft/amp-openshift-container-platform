@@ -409,6 +409,6 @@ rm /home/${SUDOUSER}/vars.yml
 rm /home/${SUDOUSER}/setup-azure-master.yml
 rm /home/${SUDOUSER}/setup-azure-node-master.yml
 rm /home/${SUDOUSER}/setup-azure-node.yml
-rm /home/${SUDOUSER}/deletestucknodes.yml
+rm /home/${SUDOUSER}/delete-stuck-nodes.yml
 
 echo $(date) " - Script complete"
