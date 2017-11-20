@@ -78,6 +78,18 @@
 			"metadata": {
 				"description": "Compute API Version"
 			}
+		},
+		"imageReference": {
+			"type": "object",
+			"metadata": {
+				"description": "Image Reference"
+			}
+		},
+		"plan": {
+			"type": "object",
+			"metadata": {
+				"description": "OS Plan"
+			}
 		}
 	},
 	"variables": {
@@ -96,11 +108,7 @@
 			"provider": "[variables('redHatTags').provider]",
 			"app": "[variables('redHatTags').app]"
 		},
-		"plan": {
-			"name": "rhel74",
-			"publisher": "redhat",
-			"product": "rhel-byol"			
-		},
+		"plan": "[parameters('plan')]",
 		"properties": {
 			"hardwareProfile": {
 				"vmSize": "[parameters('vmSize')]"
@@ -119,12 +127,7 @@
 				}
 			},
 			"storageProfile": {
-				"imageReference": {
-					"publisher": "redhat",
-					"offer": "rhel-byol",
-					"sku": "rhel74",
-					"version": "latest"
-				},
+				"imageReference": "[parameters('imageReference')]",
 				"osDisk": {
 					"name": "[concat(parameters('hostname'), 'osdisk')]",
 					"vhd": {

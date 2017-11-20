@@ -99,6 +99,18 @@
 			"metadata": {
 				"description": "Compute API Version"
 			}
+		},
+		"imageReference": {
+			"type": "object",
+			"metadata": {
+				"description": "Image Reference"
+			}
+		},
+		"plan": {
+			"type": "object",
+			"metadata": {
+				"description": "OS Plan"
+			}
 		}
 	},
 	"variables": {
@@ -117,11 +129,7 @@
 			"provider": "[variables('redHatTags').provider]",
 			"app": "[variables('redHatTags').app]"
 		},
-		"plan": {
-			"name": "rhel74",
-			"publisher": "redhat",
-			"product": "rhel-byol"			
-		},
+		"plan": "[parameters('plan')]",
 		"properties": {
 			"availabilitySet": {
 				"id": "[resourceId('Microsoft.Compute/availabilitySets', parameters('availabilitySet'))]"
@@ -143,19 +151,15 @@
 				}
 			},
 			"storageProfile": {
-				"imageReference": {
-					"publisher": "redhat",
-					"offer": "rhel-byol",
-					"sku": "rhel74",
-					"version": "latest"
-				},
+				"imageReference": "[parameters('imageReference')]",
 				"osDisk": {
 					"name": "[concat(parameters('hostname'), 'osdisk')]",
 					"vhd": {
 						"uri": "[concat(concat(reference(resourceId(resourceGroup().name, 'Microsoft.Storage/storageAccounts', parameters('newStorageAccount')), parameters('apiVersionStorage')).primaryEndpoints['blob'], 'vhds/'), parameters('hostname'), '.vhd')]"
 					},
 					"caching": "ReadWrite",
-					"createOption": "FromImage"
+					"createOption": "FromImage",
+					"diskSizeGB": 128
 				},
 				"copy": [{
 					"name": "dataDisks",
