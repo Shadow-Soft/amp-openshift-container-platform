@@ -89,19 +89,16 @@ echo $(date) " - Create Ansible Hosts file"
 # Build glusterfs node list
 # Grab drive name from host
 
->&2 echo "start check"
-runuser $SUDOUSER -c "ssh ${NODESUBNET}4 'sudo /usr/sbin/fdisk -l'" 
-runuser $SUDOUSER -c "ssh ${NODESUBNET}4 'sudo /usr/sbin/fdisk -l'" | awk '$1 == "Disk" && $2 ~ /^\// && ! /mapper/ {if (drive) print drive; drive = $2; sub(":", "", drive);} drive && /^\// {drive = ""} END {if (drive) print drive;}
-
+runuser $SUDOUSER -c "ssh-keyscan -H ${NODESUBNET}4 >> ~/.ssh/known_hosts"
 drive=$(runuser $SUDOUSER -c "ssh ${NODESUBNET}4 'sudo /usr/sbin/fdisk -l'" | awk '$1 == "Disk" && $2 ~ /^\// && ! /mapper/ {if (drive) print drive; drive = $2; sub(":", "", drive);} drive && /^\// {drive = ""} END {if (drive) print drive;}')
-echo "drive = $drive"
->&2 echo "end check"
+
 # Fill in the first line of glusterinfo
 glusterInfo="${NODE}-0 glusterfs_ip=${NODESUBNET}4 glusterfs_devices='[ \"${drive}\" ]'"
 
 # Loop to fill in the rest of the lines in the same way
 for (( c=1; c<$NODECOUNT; c++ ))
 do
+runuser $SUDOUSER -c "ssh-keyscan -H ${NODESUBNET}c >> ~/.ssh/known_hosts"
 drive=$(runuser $SUDOUSER -c "ansible ${NODE}-$c -m shell -a \"fdisk -l\"" | awk '$1 == "Disk" && $2 ~ /^\// && ! /mapper/ {if (drive) print drive; drive = $2; sub(":", "", drive);} drive && /^\// {drive = ""} END {if (drive) print drive;}')
 glusterInfo="$glusterInfo
 ${NODE}-${c} glusterfs_ip=${NODESUBNET}$((c+4)) glusterfs_devices='[ \"${drive}\" ]'"
