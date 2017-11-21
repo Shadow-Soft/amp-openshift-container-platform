@@ -256,13 +256,13 @@
 		},
 		"imageReference": {
 			"publisher": "redhat",
-			"offer": "rhel-ocp-marketplace",
+			"offer": "rhel-byol",
 			"sku": "rhel74",
 			"version": "latest"
 		},
 		"plan": {
 			"publisher": "redhat",
-			"product": "rhel-ocp-marketplace",
+			"product": "rhel-byol",
 			"name": "rhel74"
 		},
 		"singlequote": "'",
