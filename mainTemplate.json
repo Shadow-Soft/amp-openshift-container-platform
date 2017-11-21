@@ -254,15 +254,15 @@
 				"dataDiskSize": 512
 			}
 		},
-		"osType": {
+		"imageReference": {
 			"publisher": "redhat",
-			"offer": "rhel-byol",
+			"offer": "rhel-ocp-marketplace",
 			"sku": "rhel74",
 			"version": "latest"
 		},
 		"plan": {
 			"publisher": "redhat",
-			"product": "rhel-byol",
+			"product": "rhel-ocp-marketplace",
 			"name": "rhel74"
 		},
 		"singlequote": "'",
@@ -1088,6 +1088,12 @@
 					},
 					"apiVersionCompute": {
 						"value": "[variables('apiVersionCompute')]"
+					},
+					"imageReference": {
+						"value": "[variables('imageReference')]"
+					},
+					"plan": {
+						"value": "[variables('plan')]"
 					}
 				}
 			}
@@ -1153,6 +1159,12 @@
 					},
 					"apiVersionCompute": {
 						"value": "[variables('apiVersionCompute')]"
+					},
+					"imageReference": {
+						"value": "[variables('imageReference')]"
+					},
+					"plan": {
+						"value": "[variables('plan')]"
 					}
 				}
 			}
@@ -1218,6 +1230,12 @@
 					},
 					"apiVersionCompute": {
 						"value": "[variables('apiVersionCompute')]"
+					},
+					"imageReference": {
+						"value": "[variables('imageReference')]"
+					},
+					"plan": {
+						"value": "[variables('plan')]"
 					}
 				}
 			}
@@ -1283,6 +1301,12 @@
 					},
 					"apiVersionCompute": {
 						"value": "[variables('apiVersionCompute')]"
+					},
+					"imageReference": {
+						"value": "[variables('imageReference')]"
+					},
+					"plan": {
+						"value": "[variables('plan')]"
 					}
 				}
 			}
