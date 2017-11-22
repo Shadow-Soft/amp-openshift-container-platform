@@ -130,8 +130,8 @@ openshift_disable_check=memory_availability,docker_image_availability
 #openshift_hosted_registry_replicas=3
 #openshift_storage_glusterfs_use_default_selector=False
 #openshift_storage_glusterfs_nodeselector='type=${INFRATYPE}'
-openshift_storage_glusterfs_namespace=glusterfs 
-openshift_storage_glusterfs_name=storage
+#openshift_storage_glusterfs_namespace=glusterfs 
+#openshift_storage_glusterfs_name=storage
 openshift_storage_glusterfs_is_native=True
 
 # default selectors for router and registry services
@@ -177,7 +177,6 @@ masters
 nodes
 master0
 glusterfs
-#glusterfs_registry
 new_nodes
 
 # host group for masters
@@ -189,9 +188,6 @@ $MASTER-0
 
 [glusterfs]
 $glusterInfo
-
-#[glusterfs_registry]
-#$glusterInfo
 
 # host group for nodes
 [nodes]
@@ -209,7 +205,6 @@ nodes
 etcd
 master0
 glusterfs
-#glusterfs_registry
 new_nodes
 
 # host group for masters
@@ -225,9 +220,6 @@ $MASTER-0
 
 [glusterfs]
 $glusterInfo
-
-#[glusterfs_registry]
-#$glusterInfo
 
 # host group for nodes
 [nodes]
