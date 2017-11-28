@@ -132,7 +132,7 @@ openshift_disable_check=memory_availability,docker_image_availability
 #openshift_storage_glusterfs_nodeselector='type=${INFRATYPE}'
 #openshift_storage_glusterfs_namespace=glusterfs 
 #openshift_storage_glusterfs_name=storage
-openshift_storage_glusterfs_is_native=True
+#openshift_storage_glusterfs_is_native=True
 
 # default selectors for router and registry services
 openshift_router_selector='type=${INFRATYPE}'
@@ -287,12 +287,6 @@ echo $(date) " - Modifying sudoers"
 
 sed -i -e "s/Defaults    requiretty/# Defaults    requiretty/" /etc/sudoers
 sed -i -e '/Defaults    env_keep += "LC_TIME LC_ALL LANGUAGE LINGUAS _XKB_CHARSET XAUTHORITY"/aDefaults    env_keep += "PATH"' /etc/sudoers
-
-# Deploying Registry
-echo $(date) "- Registry automatically deployed to infra nodes"
-
-# Deploying Router
-echo $(date) "- Router automaticaly deployed to infra nodes"
 
 echo $(date) "- Re-enabling requiretty"
 
