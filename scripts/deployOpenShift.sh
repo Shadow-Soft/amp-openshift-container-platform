@@ -28,6 +28,7 @@ export LOCATION=${21}
 STORAGEACCOUNT1=${22}
 SAKEY1=${23}
 NODESUBNET=${24}
+COCKPIT=false
 
 export BASTION=$(hostname)
 
@@ -118,7 +119,7 @@ docker_udev_workaround=True
 openshift_use_dnsmasq=True
 openshift_master_default_subdomain=${ROUTING}
 openshift_override_hostname_check=true
-#osm_use_cockpit=false
+#osm_use_cockpit=${COCKPIT}
 os_sdn_network_plugin_name='redhat/openshift-ovs-multitenant'
 openshift_master_console_port=443
 openshift_master_api_port=443
