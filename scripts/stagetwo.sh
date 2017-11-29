@@ -4,6 +4,7 @@ export SUDOUSER=$1
 export COCKPIT=$2
 export AZURE=$3
 export MASTER=$4
+export NODECOUNT=$5
 
 echo $(date) " - Modifying sudoers"
 
@@ -102,6 +103,54 @@ then
 	   echo $(date) "- Cloud Provider setup failed to delete stuck Master nodes or was not able to set them as unschedulable"
 	   exit 10
 	fi
+		
+	for (( c=0; c<$NODECOUNT; c++ ))
+	do
+	  oc label nodes node glusterfs=storage-host
+	done
+	oc label nodes --all logging-infra-fluentd=true logging=true 
 fi
 
-oc label nodes --all logging-infra-fluentd=true logging=true
+
+
+# Configure Metrics
+
+if [ $METRICS == "true" ]
+then
+	sleep 30
+	echo $(date) "- Deploying Metrics"
+	if [ $AZURE == "true" ]
+	then
+		runuser -l $SUDOUSER -c "ansible-playbook /usr/share/ansible/openshift-ansible/playbooks/byo/openshift-cluster/openshift-metrics.yml -e openshift_metrics_install_metrics=True -e openshift_metrics_cassandra_storage_type=dynamic"
+	else
+		runuser -l $SUDOUSER -c "ansible-playbook /usr/share/ansible/openshift-ansible/playbooks/byo/openshift-cluster/openshift-metrics.yml -e openshift_metrics_install_metrics=True"
+	fi
+	if [ $? -eq 0 ]
+	then
+	   echo $(date) " - Metrics configuration completed successfully"
+	else
+	   echo $(date) "- Metrics configuration failed"
+	   exit 11
+	fi
+fi
+
+# Configure Logging
+
+if [ $LOGGING == "true" ] 
+then
+	sleep 60
+	echo $(date) "- Deploying Logging"
+	if [ $AZURE == "true" ]
+	then
+		runuser -l $SUDOUSER -c "ansible-playbook /usr/share/ansible/openshift-ansible/playbooks/byo/openshift-cluster/openshift-logging.yml -e openshift_logging_install_logging=True -e openshift_hosted_logging_storage_kind=dynamic"
+	else
+		runuser -l $SUDOUSER -c "ansible-playbook /usr/share/ansible/openshift-ansible/playbooks/byo/openshift-cluster/openshift-logging.yml -e openshift_logging_install_logging=True"
+	fi
+	if [ $? -eq 0 ]
+	then
+	   echo $(date) " - Logging configuration completed successfully"
+	else
+	   echo $(date) "- Logging configuration failed"
+	   exit 12
+	fi
+fi

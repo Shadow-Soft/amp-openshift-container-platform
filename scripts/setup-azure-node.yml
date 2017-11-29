@@ -1,6 +1,5 @@
 #!/usr/bin/ansible-playbook 
 - hosts: nodes:!masters
-  serial: 1
   gather_facts: no
   vars_files:
   - vars.yml
