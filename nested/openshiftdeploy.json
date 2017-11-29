@@ -203,7 +203,6 @@
 			"settings": {
 				"fileUris": [
 					"[concat(parameters('_artifactsLocation'), '/scripts/', variables('mainScript'))]",
-					"[concat(parameters('_artifactsLocation'), '/scripts/stagetwo.sh')]",
 					"[concat(parameters('_artifactsLocation'), '/scripts/setup-azure-master-single.yml')]",
 					"[concat(parameters('_artifactsLocation'), '/scripts/setup-azure-master-multi.yml')]",
 					"[concat(parameters('_artifactsLocation'), '/scripts/setup-azure-node-master.yml')]",
