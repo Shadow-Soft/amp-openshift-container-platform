@@ -286,7 +286,7 @@ fi
 
 # Running stage two of the script
 echo "Stage two...."
-/home/${SUDOUSER}/stagetwo.sh $SUDOUSER $COCKPIT $AZURE
+/home/${SUDOUSER}/stagetwo.sh $SUDOUSER $COCKPIT $AZURE $MASTER
 
 # Delete postinstall.yml file
 echo $(date) "- Deleting unecessary files"

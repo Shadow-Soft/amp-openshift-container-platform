@@ -3,6 +3,7 @@
 export SUDOUSER=$1
 export COCKPIT=$2
 export AZURE=$3
+export MASTER=$4
 
 echo $(date) " - Modifying sudoers"
 
