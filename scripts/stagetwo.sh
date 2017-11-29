@@ -83,25 +83,25 @@ then
 	   exit 8
 	fi
 
-	#runuser $SUDOUSER -c "ansible-playbook ~/setup-azure-node.yml"
+	runuser $SUDOUSER -c "ansible-playbook ~/setup-azure-node.yml"
 
-	#if [ $? -eq 0 ]
-	#then
-	#   echo $(date) " - Cloud Provider setup of node config on App Nodes completed successfully"
-	#else
-	#	echo $(date) "- Cloud Provider setup of node config on App Nodes failed to completed"
-	#   exit 9
-	#fi
+	if [ $? -eq 0 ]
+	then
+	   echo $(date) " - Cloud Provider setup of node config on App Nodes completed successfully"
+	else
+		echo $(date) "- Cloud Provider setup of node config on App Nodes failed to completed"
+	   exit 9
+	fi
 
-	#runuser $SUDOUSER -c "ansible-playbook ~/delete-stuck-nodes.yml"
+	runuser $SUDOUSER -c "ansible-playbook ~/delete-stuck-nodes.yml"
 
-	#if [ $? -eq 0 ]
-	#then
-	#   echo $(date) " - Cloud Provider setup of OpenShift Cluster completed successfully"
-	#else
-	#   echo $(date) "- Cloud Provider setup failed to delete stuck Master nodes or was not able to set them as unschedulable"
-	#   exit 10
-	#fi
+	if [ $? -eq 0 ]
+	then
+	   echo $(date) " - Cloud Provider setup of OpenShift Cluster completed successfully"
+	else
+	   echo $(date) "- Cloud Provider setup failed to delete stuck Master nodes or was not able to set them as unschedulable"
+	   exit 10
+	fi
 fi
 
 oc label nodes --all logging-infra-fluentd=true logging=true
