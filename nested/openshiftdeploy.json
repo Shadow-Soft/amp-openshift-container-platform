@@ -180,7 +180,6 @@
 		"location": "[resourceGroup().location]",
 		"resourceGroupName": "[resourceGroup().name]",
 		"mainScript": "deployOpenShift.sh",
-		"mainScriptUrl": "[concat(parameters('_artifactsLocation'), '/scripts/', variables('mainScript'))]",	
 		"redHatTags": {
 			"app": "OpenShift",
 			"provider": "9d2c71fc-96ba-4b4a-93b3-14def5bc96fc"
@@ -203,7 +202,8 @@
 			"autoUpgradeMinorVersion": true,
 			"settings": {
 				"fileUris": [
-					"[variables('mainScriptUrl')]",
+					"[concat(parameters('_artifactsLocation'), '/scripts/', variables('mainScript'))]",
+					"[concat(parameters('_artifactsLocation'), '/scripts/stagetwo.sh')]",
 					"[concat(parameters('_artifactsLocation'), '/scripts/setup-azure-master-single.yml')]",
 					"[concat(parameters('_artifactsLocation'), '/scripts/setup-azure-master-multi.yml')]",
 					"[concat(parameters('_artifactsLocation'), '/scripts/setup-azure-node-master.yml')]",
