@@ -59,8 +59,6 @@ cp ${currentDir}/addocpuser.yml /home/${SUDOUSER}/
 cp ${currentDir}/assignclusteradminrights.yml /home/${SUDOUSER}/
 cp ${currentDir}/assignrootpassword.yml /home/${SUDOUSER}/
 cp ${currentDir}/dockerregistry.yml /home/${SUDOUSER}/
-cp ${currentDir}/stagetwo.sh /home/${SUDOUSER}/
-chmod 755 /home/${SUDOUSER}/stagetwo.sh
 chown -R ${SUDOUSER}. /home/${SUDOUSER}/*
 
 cd /home/${SUDOUSER}
@@ -448,6 +446,5 @@ rm /home/${SUDOUSER}/setup-azure-master.yml
 rm /home/${SUDOUSER}/setup-azure-node-master.yml
 rm /home/${SUDOUSER}/setup-azure-node.yml
 rm /home/${SUDOUSER}/delete-stuck-nodes.yml
-rm /home/${SUDOUSER}/stagetwo.sh
 
 echo $(date) " - Script complete"
