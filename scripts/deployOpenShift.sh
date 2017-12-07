@@ -146,7 +146,7 @@ openshift_master_cluster_public_hostname=$MASTERPUBLICIPHOSTNAME
 openshift_master_identity_providers=[{'name': 'htpasswd_auth', 'login': 'true', 'challenge': 'true', 'kind': 'HTPasswdPasswordIdentityProvider', 'filename': '/etc/origin/master/htpasswd'}]
 
 # Setup metrics
-openshift_hosted_metrics_deploy=false
+openshift_hosted_metrics_deploy=true
 openshift_metrics_cassandra_storage_type=dynamic
 openshift_metrics_start_cluster=true
 openshift_metrics_hawkular_nodeselector={"type":"${INFRATYPE}"}
@@ -155,7 +155,7 @@ openshift_metrics_heapster_nodeselector={"type":"${INFRATYPE}"}
 openshift_hosted_metrics_public_url=https://metrics.${ROUTING}/hawkular/metrics
 
 # Setup logging
-openshift_hosted_logging_deploy=false
+openshift_hosted_logging_deploy=true
 openshift_hosted_logging_storage_kind=dynamic
 openshift_logging_fluentd_nodeselector={"logging":"true"}
 openshift_logging_es_nodeselector={"type":"${INFRATYPE}"}
@@ -388,50 +388,6 @@ then
 	  oc label node $NODE-$c glusterfs=storage-host
 	done
 	oc label nodes --all logging-infra-fluentd=true logging=true 
-fi
-
-
-
-# Configure Metrics
-
-if [ $METRICS == "true" ]
-then
-	sleep 30
-	echo $(date) "- Deploying Metrics"
-	if [ $AZURE == "true" ]
-	then
-		runuser -l $SUDOUSER -c "ansible-playbook /usr/share/ansible/openshift-ansible/playbooks/byo/openshift-cluster/openshift-metrics.yml -e openshift_metrics_install_metrics=True -e openshift_metrics_cassandra_storage_type=dynamic"
-	else
-		runuser -l $SUDOUSER -c "ansible-playbook /usr/share/ansible/openshift-ansible/playbooks/byo/openshift-cluster/openshift-metrics.yml -e openshift_metrics_install_metrics=True"
-	fi
-	if [ $? -eq 0 ]
-	then
-	   echo $(date) " - Metrics configuration completed successfully"
-	else
-	   echo $(date) "- Metrics configuration failed"
-	   exit 11
-	fi
-fi
-
-# Configure Logging
-
-if [ $LOGGING == "true" ] 
-then
-	sleep 60
-	echo $(date) "- Deploying Logging"
-	if [ $AZURE == "true" ]
-	then
-		runuser -l $SUDOUSER -c "ansible-playbook /usr/share/ansible/openshift-ansible/playbooks/byo/openshift-cluster/openshift-logging.yml -e openshift_logging_install_logging=True -e openshift_hosted_logging_storage_kind=dynamic"
-	else
-		runuser -l $SUDOUSER -c "ansible-playbook /usr/share/ansible/openshift-ansible/playbooks/byo/openshift-cluster/openshift-logging.yml -e openshift_logging_install_logging=True"
-	fi
-	if [ $? -eq 0 ]
-	then
-	   echo $(date) " - Logging configuration completed successfully"
-	else
-	   echo $(date) "- Logging configuration failed"
-	   exit 12
-	fi
 fi
 
 # Delete postinstall.yml file
