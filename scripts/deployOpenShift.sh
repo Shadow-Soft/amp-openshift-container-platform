@@ -383,6 +383,8 @@ then
 	   exit 10
 	fi
 		
+	sleep 60
+	
 	for (( c=0; c<$NODECOUNT; c++ ))
 	do
 	  oc label node $NODE-$c glusterfs=storage-host
